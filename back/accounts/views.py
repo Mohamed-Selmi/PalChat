@@ -1,10 +1,20 @@
 from django.contrib.auth import get_user_model, login, logout
+from django.contrib.auth.tokens import default_token_generator
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.utils.encoding import force_bytes
+from django.core.mail import send_mail
+from django.urls import reverse
+from rest_auth.views import PasswordResetView
+from django.conf import settings
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from .serializers import UserRegisterSerializer, UserLoginSerializer, UserSerializer
 from rest_framework import permissions, status
 from .validations import custom_validation, validate_email, validate_password
+from django.core.mail import send_mail
+from pfe.settings import EMAIL_HOST_USER
+
 
 
 class UserRegister(APIView):
@@ -48,3 +58,28 @@ class UserView(APIView):
 	def get(self, request):
 		serializer = UserSerializer(request.user)
 		return Response({'user': serializer.data}, status=status.HTTP_200_OK)
+class PasswordReset(APIView):
+    permission_classes = (permissions.AllowAny,)
+
+    def post(self, request):
+        email = request.data.get('email')
+        if email:
+            User = get_user_model()
+            try:
+                user = User.objects.get(email=email)
+            except User.DoesNotExist:
+                user = None
+            if user:
+                # Generate reset password token
+                uid = urlsafe_base64_encode(force_bytes(user.pk))
+                token = default_token_generator.make_token(user)
+                reset_url = reverse('password_reset_confirm', kwargs={'uidb64': uid, 'token': token})
+                reset_link = f'{settings.BASE_URL}{reset_url}'
+                # Send email with reset link
+                subject = 'Password Reset'
+                message = f'Click the following link to reset your password: {reset_link}'
+                from_email = settings.DEFAULT_FROM_EMAIL
+                to_email = [email]
+                send_mail(subject, message, from_email, to_email)
+                return Response({'message': 'Password reset email has been sent'}, status=status.HTTP_200_OK)
+        return Response({'error': 'User with this email does not exist'}, status=status.HTTP_400_BAD_REQUEST)

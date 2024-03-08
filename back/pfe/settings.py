@@ -40,6 +40,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',
     'accounts.apps.AccountsConfig',
+    'django_rest_passwordreset',
+    'rest_framework.authtoken',
 ]
 
 MIDDLEWARE = [
@@ -138,3 +140,10 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+BASE_URL = 'http://192.168.1.3:8000/'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'hamauda10@gmail.com'
+EMAIL_HOST_PASSWORD = 'liwp ddnl vgbn dsdp'

@@ -15,7 +15,7 @@ void main() {
       
         primarySwatch: Colors.blue,
       ),
-      home:  const LoginView(),
+      home:  const Registerview(),
     ),
     );
 }
