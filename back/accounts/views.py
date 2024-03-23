@@ -4,18 +4,23 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes
 from django.core.mail import send_mail
 from django.urls import reverse
+from rest_framework_simplejwt.authentication import JWTAuthentication
+
+from rest_framework_simplejwt.tokens import RefreshToken
 from rest_auth.views import PasswordResetView
 from django.conf import settings
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from .serializers import UserRegisterSerializer, UserLoginSerializer, UserSerializer
+from .serializers import UserRegisterSerializer, UserLoginSerializer, UserSerializer,EditProfileSerializer
 from rest_framework import permissions, status
 from .validations import custom_validation, validate_email, validate_password
 from django.core.mail import send_mail
 from pfe.settings import EMAIL_HOST_USER
-
-
+from rest_framework.permissions import IsAuthenticated
+User=get_user_model()
+from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework_simplejwt.views import TokenObtainPairView
 
 class UserRegister(APIView):
 	permission_classes = (permissions.AllowAny,)
@@ -26,7 +31,7 @@ class UserRegister(APIView):
 			user = serializer.create(clean_data)
 			if user:
 				return Response(serializer.data, status=status.HTTP_201_CREATED)
-		return Response(status=status.HTTP_400_BAD_REQUEST)
+		return Response(clean_data,status=status.HTTP_400_BAD_REQUEST)
 
 
 class UserLogin(APIView):
@@ -54,7 +59,7 @@ class UserLogout(APIView):
 
 class UserView(APIView):
 	permission_classes = (permissions.IsAuthenticated,)
-	authentication_classes = (SessionAuthentication,)
+	authentication_classes = (JWTAuthentication,SessionAuthentication)
 	def get(self, request):
 		serializer = UserSerializer(request.user)
 		return Response({'user': serializer.data}, status=status.HTTP_200_OK)
@@ -70,16 +75,33 @@ class PasswordReset(APIView):
             except User.DoesNotExist:
                 user = None
             if user:
-                # Generate reset password token
                 uid = urlsafe_base64_encode(force_bytes(user.pk))
                 token = default_token_generator.make_token(user)
                 reset_url = reverse('password_reset_confirm', kwargs={'uidb64': uid, 'token': token})
                 reset_link = f'{settings.BASE_URL}{reset_url}'
-                # Send email with reset link
                 subject = 'Password Reset'
                 message = f'Click the following link to reset your password: {reset_link}'
                 from_email = settings.DEFAULT_FROM_EMAIL
                 to_email = [email]
                 send_mail(subject, message, from_email, to_email)
-                return Response({'message': 'Password reset email has been sent'}, status=status.HTTP_200_OK)
+                return Response({'message': 'Password reset email has been sent','deep_link': reset_link}, status=status.HTTP_200_OK)
         return Response({'error': 'User with this email does not exist'}, status=status.HTTP_400_BAD_REQUEST)
+class GetAllUsers(APIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    permission_classes = [IsAuthenticated]
+    def get(self, request):
+        users = User.objects.exclude(username=self.request.user.username)
+        serializer = self.serializer_class(users, many=True)
+        return Response(data=serializer.data, status=status.HTTP_200_OK) 
+class EditProfile(APIView):
+    permission_classes = (permissions.IsAuthenticated,)
+    authentication_classes = (JWTAuthentication, SessionAuthentication)
+
+    def put(self, request):
+        serializer = EditProfileSerializer(request.user, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+	

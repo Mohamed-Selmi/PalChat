@@ -25,6 +25,20 @@ class UserLoginSerializer(serializers.Serializer):
 		return user
 
 class UserSerializer(serializers.ModelSerializer):
+	picture_url = serializers.SerializerMethodField()
+
 	class Meta:
 		model = UserModel
-		fields = ('email', 'username')
+		fields = ('email', 'username', 'picture_url')
+	def get_picture_url(self, obj):
+		return obj.get_picture_url()
+class EditProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserModel
+        fields = ('username', 'picture')  # Assuming 'picture' is the field for profile picture
+
+    def update(self, instance, validated_data):
+        instance.username = validated_data.get('username', instance.username)
+        instance.picture = validated_data.get('picture', instance.picture)
+        instance.save()
+        return instance

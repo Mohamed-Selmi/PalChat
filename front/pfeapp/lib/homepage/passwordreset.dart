@@ -1,6 +1,5 @@
 // ignore_for_file: unused_import
 
-import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'dart:convert';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -11,7 +10,7 @@ import 'package:pfeapp/homepage/loginview.dart';
 import 'package:pfeapp/homepage/passwordreset.dart';
 import 'package:pfeapp/homepage/resetform.dart';
 Future<void> ResetPassword(BuildContext context,String email) async{
-  final String apiUrl = 'http://192.168.1.3:8000/accounts/password-reset';
+  const String apiUrl = 'http://192.168.1.3:8000/accounts/password-reset';
 
   // Prepare the request body
   final Map<String, dynamic> data = {
@@ -37,7 +36,7 @@ Future<void> ResetPassword(BuildContext context,String email) async{
       print('Password reset email sent successfully');
      Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => ResetForm()),
+        MaterialPageRoute(builder: (context) => const ResetForm()),
       );
     } else {
       // Request failed
@@ -62,15 +61,15 @@ TextEditingController emailController = TextEditingController();
   Widget build(BuildContext context) {
     return Scaffold(
           resizeToAvoidBottomInset: false,
-          backgroundColor: Color.fromARGB(255, 255, 255, 255),
+          backgroundColor: const Color.fromARGB(255, 255, 255, 255),
           
           body:Container(
             margin: const EdgeInsets.only(top: 40.0),
-            color:Color.fromARGB(0, 255, 255, 255),
+            color:const Color.fromARGB(0, 255, 255, 255),
             child: Column(children: [
-              SizedBox(height:10,),
+              const SizedBox(height:10,),
               Container(
-                child:Text('Welcome To PalChat',
+                child:const Text('Welcome To PalChat',
                 textAlign: TextAlign.center,
                 style:TextStyle(
                   fontFamily: 'Aleo',
@@ -94,16 +93,16 @@ TextEditingController emailController = TextEditingController();
                   ),
                   ),
                 ),
-              SizedBox(height:40),
+              const SizedBox(height:40),
              Container(
                 child:Row(mainAxisAlignment: MainAxisAlignment.center, 
                   children: [
-              Icon(
+              const Icon(
                     Icons.lock,
                     color: Colors.blue,
                     size: 100.0,
                   ),
-                  Container(child:Column(children:[
+                  Container(child:const Column(children:[
                       Text('Forgot',
                 textAlign: TextAlign.left,
                 style:TextStyle(
@@ -126,7 +125,7 @@ TextEditingController emailController = TextEditingController();
                   ]
                 ),
              ),
-             SizedBox(height:20,),
+             const SizedBox(height:20,),
               SizedBox(height: 40, width:300,
                       child:TextField(
                       
@@ -135,7 +134,7 @@ TextEditingController emailController = TextEditingController();
                       keyboardType: TextInputType.emailAddress,
                       controller: emailController,
                       style: const TextStyle(color: Color.fromARGB(255, 0, 0, 0),),
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         contentPadding: EdgeInsets.symmetric(vertical: 1.0),
                         hintText: 'Enter your Email Address',
                         prefixIcon: Icon(Icons.email,
@@ -149,14 +148,14 @@ TextEditingController emailController = TextEditingController();
                     ),
                     ),
                     
-                    SizedBox(height:20),
+                    const SizedBox(height:20),
                     SizedBox(
                       height:30,
                       width:200,
                      child:ElevatedButton(
                       style:ButtonStyle(
                         backgroundColor: MaterialStateProperty.all<Color>(const Color.fromARGB(255, 68, 68, 68)),
-                        shape: MaterialStateProperty.all<OutlinedBorder>(RoundedRectangleBorder(
+                        shape: MaterialStateProperty.all<OutlinedBorder>(const RoundedRectangleBorder(
                             borderRadius: BorderRadius.zero,)
                             ),
                       ),
@@ -166,7 +165,7 @@ TextEditingController emailController = TextEditingController();
                     emailController.text,
                   );
                 },
-                child:Text("Reset Password ",
+                child:const Text("Reset Password ",
                 textAlign: TextAlign.center,
                 style: TextStyle(
                    fontFamily: 'Montserrat', 
