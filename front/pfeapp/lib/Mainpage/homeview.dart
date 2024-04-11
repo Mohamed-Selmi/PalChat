@@ -13,11 +13,11 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/gestures.dart';
 import 'package:pfeapp/Mainpage/profile.dart';
+import 'package:pfeapp/Mainpage/groups.dart';
+
 import 'package:pfeapp/homepage/loginview.dart';
 import 'package:pfeapp/homepage/registerview.dart';
 import 'package:pfeapp/homepage/passwordreset.dart';
-
-
 
 class HomeView extends StatefulWidget {
 
@@ -64,14 +64,14 @@ void initState() {
           if (i == 1) {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => const AllUsersScreen()),
+              MaterialPageRoute(builder: (context) =>  AllUsersScreen()),
             );
           }
           else if (i == 2 ) {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => HomeView()),
-            );
+             Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => UserConversations()), // Navigate to ConversationsWidget
+    );
           }  
                     else if (i == 3 ) {
             Navigator.push(

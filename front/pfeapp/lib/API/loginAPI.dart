@@ -6,7 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginAPI {
   static Future<void> loginUser(String email, String password, BuildContext context) async {
-    const String apiUrl = 'http://192.168.1.3:8000/api/token/';
+    const String apiUrl = 'http://192.168.1.3:8000/accounts/login';
 
     final Map<String, dynamic> data = {
       'email': email,
@@ -26,8 +26,8 @@ class LoginAPI {
 
       if (response.statusCode == 200) {
         final Map<String, dynamic> responseData = json.decode(response.body);
-        final String accessToken = responseData['access']; // Extract access token
-        final String refreshToken = responseData['refresh']; // Extract refresh token
+        final String accessToken = responseData['access']; 
+        final String refreshToken = responseData['refresh']; 
           
         // Save tokens using shared_preferences
         SharedPreferences prefs = await SharedPreferences.getInstance();

@@ -1,7 +1,5 @@
-
 import 'package:flutter/material.dart';
 import 'package:pfeapp/models/user.dart';
-
 import 'package:pfeapp/API/friendListAPI.dart';
 class AllUsersScreen extends StatefulWidget {
   const AllUsersScreen({Key? key}) : super(key: key);

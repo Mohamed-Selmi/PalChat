@@ -1,19 +1,23 @@
 class Message {
   final String fromUser;
-  final String toUser;
   final String message;
+  final DateTime timestamp;
+  final String? imageUrl;
 
   Message({
     required this.fromUser,
-    required this.toUser,
+    required this.timestamp,
     required this.message,
+    this.imageUrl
   });
 
   factory Message.fromMap(Map<String, dynamic> map) {
+    
     return Message(
-      fromUser: map['from_user'] ?? '',
-      toUser: map['to_user'] ?? '',
+      fromUser: map['sender']['username'] ?? '',
       message: map['content'] ?? '',
+      timestamp: DateTime.parse(map['timestamp'] ?? ''),
+      imageUrl: map['picture_url'] ?? '',
     );
   }
 }

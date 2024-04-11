@@ -44,7 +44,7 @@ INSTALLED_APPS = [
     'accounts.apps.AccountsConfig',
     'django_rest_passwordreset',
     'rest_framework.authtoken',
-    'chat.apps.ChatConfig',
+    'chat',
     
  
 ]
@@ -95,7 +95,7 @@ DATABASES = {
         'USER': 'root',
         'PASSWORD': 'root',
         'HOST':'localhost',
-        'PORT':'3306'
+        'PORT':'3306',
         
     }
 }
@@ -148,7 +148,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'pfe/media')
 
 STATIC_URL = 'static/'
 SIMPLE_JWT = {
-    "ACCESS_TOKEN_LIFETIME": timedelta(hours=1),
+    "ACCESS_TOKEN_LIFETIME": timedelta(hours=24),
     'USER_ID_FIELD': 'user_id'
 }
 # Default primary key field type

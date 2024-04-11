@@ -2,111 +2,113 @@ import json
 from channels.db import database_sync_to_async
 from channels.layers import get_channel_layer
 from channels.generic.websocket import AsyncWebsocketConsumer,WebsocketConsumer,AsyncJsonWebsocketConsumer
-
+from .middleware import JWTAuthMiddleware
 from asgiref.sync import async_to_sync
 from django.contrib.auth import get_user_model
 from django.db.models import Q
 from django.core.files.uploadedfile import InMemoryUploadedFile
 import base64
+from django.core.files.base import ContentFile
 from .models import Conversation, GroupMembers, Message, UserInbox
 import io
 User = get_user_model()
-class ChatConsumer(AsyncJsonWebsocketConsumer):
-
+class ChatConsumer(AsyncWebsocketConsumer):
     async def connect(self):
-        self.user_id = self.scope['url_route']['kwargs']['user_id']
+        self.group_id = self.scope['url_route']['kwargs']['group_id']
+        self.user = self.scope.get('user')
+        if self.user is None:
+            await self.close()
+            return
+
         await self.save_user_channel()
-        await self.accept()
-    async def disconnect(self, close_code):
-        await self.delete_user_channel()
-        await self.disconnect(close_code)
-
-    async def receive_json(self, text_data=None, byte_data=None):
-        message = text_data['message']
-        self.to_user = text_data['to_user']
-        to_user_channel, to_user_id = await self.get_user_channel(self.to_user)
-        self.group_name = f'{self.user_id}-{self.to_user}'
-        message_response = await self.save_message(self.group_name, self.user, message)
-        message_response['type'] = 'send.message'
-
-        channel_layer = get_channel_layer()
-
         await self.channel_layer.group_add(
-            self.group_name,
-            str(self.channel_name)
+            self.group_id,
+            self.channel_name
         )
-        if to_user_channel != None and to_user_id != None:
-            await self.channel_layer.group_add(
-                self.group_name,
-                str(to_user_channel)
-            )
+        await self.accept()
 
-        await channel_layer.group_send(
-            self.group_name, message_response
+    async def disconnect(self, close_code):
+        await self.channel_layer.group_discard(
+            self.group_id,
+            self.channel_name
         )
-    async def send_message(self, event):
-        print(event)
-        await self.send(text_data=json.dumps(event))
-    @database_sync_to_async
-    def get_user_channel(self, to_user):
+        await self.delete_user_channel()
+        await super().disconnect(close_code)
+
+    async def receive(self, text_data=None, bytes_data=None):
+        if text_data:
+            await self.receive_text(text_data)
+        elif bytes_data:
+            await self.receive_image(bytes_data)
+
+    async def receive_text(self, text_data):
         try:
-            send_user_channel = UserInbox.objects.filter(
-                user=to_user).latest('id')
-            channel_name = send_user_channel
-            user_id = send_user_channel.user.user_id
-        except Exception as e:
-            channel_name = None
-            user_id = None
+            message = text_data
+        except KeyError:
+            return
+        message_response = await self.save_message(self.group_id, self.user, message)
+        await self.channel_layer.group_send(
+            self.group_id,
+            {
+                'type': 'chat.message',
+                'message': message_response
+            }
+        )
 
-        return channel_name, user_id
+    async def receive_image(self, bytes_data):
+        try:
+            format, imgstr = bytes_data.split(';base64,')
+            ext = format.split('/')[-1]
+            image_data = base64.b64decode(imgstr)
+            message_response = await self.save_message(self.group_id, self.user, image_data, is_image=True)
+            await self.channel_layer.group_send(
+                self.group_id,
+                {
+                    'type': 'chat.message',
+                    'message': message_response
+                }
+            )
+        except Exception as e:
+            print(f"Error handling image: {e}")
+
+    async def chat_message(self, event):
+        await self.send(text_data=json.dumps(event['message']))
 
     @database_sync_to_async
     def save_user_channel(self):
-        self.user = User.objects.get(user_id=self.user_id)
-
-        UserInbox.objects.create(
-            user=self.user,
-            channel=self.channel_name
-        )
+        try:
+            self.user = self.scope['user']
+        except KeyError:
+            pass
+        else:
+            UserInbox.objects.create(
+                user=self.user,
+                channel=self.channel_name
+            )
 
     @database_sync_to_async
     def delete_user_channel(self):
-        UserInbox.objects.filter(user=self.user).delete()
+        if self.user is not None:
+            UserInbox.objects.filter(user_id=self.user.user_id).delete()
 
     @database_sync_to_async
-    def save_message(self, room, user, content):
-        try:
-            GroupMembers.objects.get_or_create(
-                Q(conversation__name=f'{self.user.user_id}-{self.to_user}') |
-                Q(conversation__name=f'{self.to_user}-{self.user.user_id}'), user=self.user)
-            GroupMembers.objects.get_or_create(
-                Q(conversation__name=f'{self.user.user_id}-{self.to_user}') |
-                Q(conversation__name=f'{self.to_user}-{self.user.user_id}'), user=self.to_user)
-        except Exception as e:
-            print(e)
-
-        try:
-            Conversation = Conversation.objects.get(Q(name=f'{self.user.user_id}-{self.to_user}') |
-                                            Q(name=f'{self.to_user}-{self.user.user_id}'))
-            Conversation.last_message = content 
-            Conversation.last_sent_user = self.user
-        except Exception as e:
-            Conversation = Conversation.objects.create(
-                name=str(room),
-                last_message=content,
-                last_sent_user=self.user
-            )
-
+    def save_message(self, group_id, user, content):
+        conversation = Conversation.objects.get(id=group_id)
+        conversation.last_message = content
+        conversation.last_sent_user = user
+        conversation.save()
         message = Message.objects.create(
-            room=Conversation, user=self.user, content=content
+            conversation=conversation,
+            sender=user,
+            content=content
         )
-
         message_response = {
             'message_id': message.id,
-            'message_conversation': Conversation.id,
+            'message_conversation': conversation.id,
             'message_content': message.content,
-            'message_sender': str(message.sender.user_id),
+            'message_sender': message.sender.username,
             'message_timestamp': str(message.timestamp),
+            'message_image_url': message.get_picture_url(), 
+            
         }
-
         return message_response

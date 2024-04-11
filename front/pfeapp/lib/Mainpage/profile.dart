@@ -1,34 +1,32 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:pfeapp/API/logoutAPI.dart';
 import 'package:pfeapp/models/user.dart';
 import 'package:pfeapp/API/UserAPI.dart';
 import 'package:pfeapp/forms/editprofileForm.dart';
 class ProfileWidget extends StatefulWidget {
   const ProfileWidget({super.key});
-
   @override
   _ProfileWidgetState createState() => _ProfileWidgetState();
 }
 
 class _ProfileWidgetState extends State<ProfileWidget> {
   late Future<User?> futureUser;
-
   @override
   void initState() {
     super.initState();
     futureUser = UserAPI.fetchUser();
   }
-
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      
+    return Scaffold(  
+      backgroundColor: Color(0xffd1dff6),
       appBar: AppBar(
         title: const Text('Profile'),
       ),
-      body: Container(
-        
-        child: Column(children: [FutureBuilder<User?>(
+      body: Container(       
+        child: Column(children: [
+          FutureBuilder<User?>(
           future: futureUser,
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
@@ -40,102 +38,139 @@ class _ProfileWidgetState extends State<ProfileWidget> {
               child:Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [           
-                       if (snapshot.data!.pictureUrl != null) // Check if picture is available
+                       if (snapshot.data!.pictureUrl != null) 
                           CircleAvatar(
-                            radius: 100
-                          ,
-                            backgroundImage: NetworkImage(snapshot.data!.pictureUrl!),
+                             radius: 105,
+                                backgroundColor: const Color.fromARGB(255, 9, 124, 34),
+                            child: CircleAvatar(
+                              radius: 100,
+                              backgroundImage: NetworkImage(snapshot.data!.pictureUrl!),
+                            ),
                           ),
+                          const SizedBox(height:40),
                           SizedBox(
-                            width: 200, // Specify your desired width
+                               width: 250,
                             height: 40,
-                              child:Text('Email: ${snapshot.data!.email}',
-                                          style: TextStyle(
+                            child:Row(
+                              children: [
+                                              const Icon(Icons.email,
+                                      color: Color.fromARGB(255, 6, 36, 201),),
+                                Text('Email:   ${snapshot.data!.email}',
+                                          style: const TextStyle(
                                             fontFamily: 'Montserrat', 
                                               fontSize: 15,
                                               fontWeight: FontWeight.bold,
                                             color: Color.fromARGB(255, 0, 0, 0),),)
+                              ],
+                            )                                                         
                           ),
                            SizedBox(
-                            width: 200, // Specify your desired width
+                               width: 250, 
                             height: 40,
-                              child: Text('Username: ${snapshot.data!.username}',
-                                          style: TextStyle(
+                            child:Row(
+                              children: [
+                                              const Icon(Icons.person,
+                                      color: Color.fromARGB(255, 6, 36, 201),),
+                                Text('Name:   ${snapshot.data!.username}',
+                                          style: const TextStyle(
                                             fontFamily: 'Montserrat', 
                                               fontSize: 15,
                                               fontWeight: FontWeight.bold,
-                                            color: Color.fromARGB(255, 14, 14, 14),),)
+                                            color: Color.fromARGB(255, 0, 0, 0),)
+                                            ,)
+                              ],
+                            )                                                        
                           ),
-                          
+ 
                    ],
     ),
   );
             } else {
               return const Text('No User Data Found');
             }
-
           },
         ),
-         SizedBox(
-                      height:30,
-                      width:200,
-                     child:ElevatedButton(
-                      style:ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all<Color>(const Color.fromARGB(255, 68, 68, 68)),
-                        shape: MaterialStateProperty.all<OutlinedBorder>(const RoundedRectangleBorder(
-                            borderRadius: BorderRadius.zero,)
-                            ),
-                      ),
-                      onPressed: () {
-                  LogoutAPI.LogoutUser(
-                    
-                    context,
-                  );
-                },
-                child:const Text("logout",
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                   fontFamily: 'Montserrat', 
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  color: Color.fromARGB(255, 255, 255, 255),
-                ),
-                ),
-  ),
-                    ),
-                      SizedBox(height:40,),
-                     SizedBox(
-                      height:30,
-                      width:200,
-                     child:ElevatedButton(
-                      style:ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all<Color>(const Color.fromARGB(255, 68, 68, 68)),
-                        shape: MaterialStateProperty.all<OutlinedBorder>(const RoundedRectangleBorder(
-                            borderRadius: BorderRadius.zero,)
-                            ),
-                      ),
-                      onPressed: () {
-                          Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const ProfileWidget()),
-            );
-                },
-                child:const Text("edit profile",
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                   fontFamily: 'Montserrat', 
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  color: Color.fromARGB(255, 255, 255, 255),
-                ),
-                ),
-  ),
+        
+                    const SizedBox(height:20,),
+                    Container(
+                      child: Column(
+                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                                SizedBox(
+                                  height:50,
+                                  width:300,
+                                  child: Card(                                        
+                                                clipBehavior: Clip.hardEdge,
+                                                                child: InkWell(
+                                  splashColor: Colors.blue.withAlpha(30),
+                                  onTap: () {
+                                    LogoutAPI.LogoutUser(                                              
+                                                  context,
+                                                );
+                                  },
+                                  child: const Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    children: [
+                                       Icon(Icons.logout,color: Color.fromARGB(255, 1, 21, 75),),
+                                       Align(
+                                          alignment: Alignment.centerLeft,
+                                          child: Text('Logout',style: TextStyle(
+                                                          fontFamily: 'Roboto', 
+                                                            fontSize: 20,
+                                                            fontWeight: FontWeight.bold,
+                                                          color: Color.fromARGB(255, 0, 0, 0),
+                                                        ),),
+                                        ),
+                                      
+                                       Icon(Icons.arrow_forward,color: Colors.black,),
+                                    ],
+                                  ),
+                                              )
+                                            ),
+                                ),
+                                          const SizedBox(height:20,),
+                                          SizedBox(
+                                  height:50,
+                                  width:300,
+                                  child: Card(                                        
+                                                clipBehavior: Clip.hardEdge,
+                                                                child: InkWell(
+                                  splashColor: Colors.blue.withAlpha(30),
+                                  onTap: () {
+                                     Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(builder: (context) =>  EditProfileWidget()),
+                      );
+                                  },
+                                  child: const Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    children: [
+                                       Icon(Icons.settings,color: Color.fromARGB(255, 1, 21, 75),),
+                                       Align(
+                                          alignment: Alignment.centerLeft,
+                                          child: Text('Settings',style: TextStyle(
+                                                          fontFamily: 'Roboto', 
+                                                            fontSize: 20,
+                                                            fontWeight: FontWeight.bold,
+                                                          color: Color.fromARGB(255, 0, 0, 0),
+                                                        ),),
+                                        ),
+                                      
+                                       Icon(Icons.arrow_forward,color: Colors.black,),
+                                    ],
+                                  ),
+                                              )
+                                            ),
+                                ),
+                        ],
+                      )
                     ),
         ]
       ),
 
-      )
-      
+      ),
     );
   }
 }

@@ -35,18 +35,23 @@ class UserRegister(APIView):
 
 
 class UserLogin(APIView):
-	permission_classes = (permissions.AllowAny,)
-	authentication_classes = (SessionAuthentication,)
-	##
-	def post(self, request):
-		data = request.data
-		assert validate_email(data)
-		assert validate_password(data)
-		serializer = UserLoginSerializer(data=data)
-		if serializer.is_valid(raise_exception=True):
-			user = serializer.check_user(data)
-			login(request, user)
-			return Response(serializer.data, status=status.HTTP_200_OK)
+    permission_classes = (permissions.AllowAny,)
+    authentication_classes = (SessionAuthentication,)
+
+    def post(self, request):
+        data = request.data
+        assert validate_email(data)
+        assert validate_password(data)
+        serializer = UserLoginSerializer(data=data)
+        if serializer.is_valid(raise_exception=True):
+            user = serializer.check_user(data)
+            login(request, user)
+            # Generate JWT tokens
+            refresh = RefreshToken.for_user(user)
+            return Response({
+                'refresh': str(refresh),
+                'access': str(refresh.access_token),
+            }, status=status.HTTP_200_OK)
 
 
 class UserLogout(APIView):
@@ -97,7 +102,6 @@ class GetAllUsers(APIView):
 class EditProfile(APIView):
     permission_classes = (permissions.IsAuthenticated,)
     authentication_classes = (JWTAuthentication, SessionAuthentication)
-
     def put(self, request):
         serializer = EditProfileSerializer(request.user, data=request.data, partial=True)
         if serializer.is_valid():

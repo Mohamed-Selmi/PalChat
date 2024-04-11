@@ -61,7 +61,7 @@ TextEditingController emailController = TextEditingController();
   Widget build(BuildContext context) {
     return Scaffold(
           resizeToAvoidBottomInset: false,
-          backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+          backgroundColor: Color(0xffd1dff6),
           
           body:Container(
             margin: const EdgeInsets.only(top: 40.0),
