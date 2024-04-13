@@ -29,7 +29,7 @@ class UserSerializer(serializers.ModelSerializer):
 
 	class Meta:
 		model = UserModel
-		fields = ('email', 'username', 'picture_url')
+		fields = ('user_id','email', 'username', 'picture_url')
 	def get_picture_url(self, obj):
 		return obj.get_picture_url()
 class EditProfileSerializer(serializers.ModelSerializer):

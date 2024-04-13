@@ -20,7 +20,7 @@ from pfe.settings import EMAIL_HOST_USER
 from rest_framework.permissions import IsAuthenticated
 User=get_user_model()
 from rest_framework_simplejwt.tokens import RefreshToken
-from rest_framework_simplejwt.views import TokenObtainPairView
+
 
 class UserRegister(APIView):
 	permission_classes = (permissions.AllowAny,)
@@ -108,4 +108,17 @@ class EditProfile(APIView):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-	
+class SearchUserView(APIView):
+    permission_classes = (permissions.IsAuthenticated,)
+    authentication_classes = (JWTAuthentication,SessionAuthentication)
+    def get(self, request):
+        username = request.query_params.get('username', None)
+        if username:
+            users = User.objects.filter(username__icontains=username)
+            if users.exists():
+                serializer = UserSerializer(users, many=True)
+                return Response(serializer.data)
+            else:
+                return Response({'message': 'No users found with the provided username'}, status=status.HTTP_404_NOT_FOUND)
+        else:
+            return Response({'error': 'Please provide a username query parameter'}, status=status.HTTP_400_BAD_REQUEST)   

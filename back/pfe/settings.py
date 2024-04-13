@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'django_rest_passwordreset',
     'rest_framework.authtoken',
     'chat',
+    'friends'
     
  
 ]

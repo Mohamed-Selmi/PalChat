@@ -36,6 +36,7 @@ class _GroupDetailWidgetState extends State<GroupDetailWidget> {
           } else {
             List<User> members = (snapshot.data!['members'] as List)
                 .map((member) => User(
+                      id:member['user_id'],
                       email: member['email'],
                       username: member['username'],
                       pictureUrl: member['picture_url'],
