@@ -6,33 +6,27 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/gestures.dart';
 import 'package:pfeapp/homepage/loginview.dart';
-import 'package:flutter/material.dart';
-
 class ResetForm extends StatefulWidget {
-  final String? deepLink;
-
-  const ResetForm({Key? key, this.deepLink}) : super(key: key);
-
+  const ResetForm({super.key});
   @override
-  _ResetFormState createState() => _ResetFormState();
+  ResetCard createState() => ResetCard();
 }
-
-class _ResetFormState extends State<ResetForm> {
+class ResetCard extends State<ResetForm> {
   TextEditingController newPasswordController = TextEditingController();
   TextEditingController confirmNewPasswordController = TextEditingController();
 @override
   Widget build(BuildContext context) {
     return Scaffold(
           resizeToAvoidBottomInset: false,
-          backgroundColor: Color.fromARGB(255, 255, 255, 255),
+          backgroundColor: const Color.fromARGB(255, 255, 255, 255),
           
           body:Container(
             margin: const EdgeInsets.only(top: 40.0),
-            color:Color.fromARGB(0, 255, 255, 255),
+            color:const Color.fromARGB(0, 255, 255, 255),
             child: Column(children: [
-              SizedBox(height:10,),
+              const SizedBox(height:10,),
               Container(
-                child:Text('Welcome To PalChat',
+                child:const Text('Welcome To PalChat',
                 textAlign: TextAlign.center,
                 style:TextStyle(
                   fontFamily: 'Aleo',
@@ -56,9 +50,40 @@ class _ResetFormState extends State<ResetForm> {
                   ),
                   ),
                 ),
-              SizedBox(height:40),
-             
-             SizedBox(height:20,),
+              const SizedBox(height:40),
+             Container(
+                child:Row(mainAxisAlignment: MainAxisAlignment.center, 
+                  children: [
+              const Icon(
+                    Icons.lock,
+                    color: Colors.blue,
+                    size: 100.0,
+                  ),
+                  Container(child:const Column(children:[
+                      Text('Forgot',
+                textAlign: TextAlign.left,
+                style:TextStyle(
+                  fontFamily: 'Aleo',
+                      fontStyle: FontStyle.normal,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 25.0,
+                      color: Colors.black
+                )),
+                Text('Password?',
+                textAlign: TextAlign.center,
+                style:TextStyle(
+                  fontFamily: 'Aleo',
+                      fontStyle: FontStyle.normal,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 25.0,
+                      color: Colors.blue
+                )),
+                  ]))
+                  ]
+                ),
+             ),
+             const SizedBox(height:20,),
+           
               SizedBox(height: 40, width:300,
                       child:TextField(
                       
@@ -67,10 +92,10 @@ class _ResetFormState extends State<ResetForm> {
                       autocorrect: false,
                       controller: newPasswordController,
                       style: const TextStyle(color: Color.fromARGB(255, 0, 0, 0),),
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         contentPadding: EdgeInsets.symmetric(vertical: 1.0),
-                        hintText: 'Enter your Email Address',
-                        prefixIcon: Icon(Icons.email,
+                        hintText: 'Enter your new password',
+                        prefixIcon: Icon(Icons.key,
                         color: Colors.black,),
                         filled: true,
                         fillColor: Color.fromARGB(255, 255, 255, 255),
@@ -80,21 +105,43 @@ class _ResetFormState extends State<ResetForm> {
                       ),
                     ),
                     ),
-                    SizedBox(height:20),
+                    const SizedBox(height:20),
+                    SizedBox(height: 40, width:300,
+                      child:TextField(
+                      
+                      obscureText: true,
+                      enableSuggestions: false,
+                      autocorrect: false,
+                      controller: confirmNewPasswordController,
+                      style: const TextStyle(color: Color.fromARGB(255, 0, 0, 0),),
+                      decoration: const InputDecoration(
+                        contentPadding: EdgeInsets.symmetric(vertical: 1.0),
+                        hintText: 'Confirm your new Password',
+                        prefixIcon: Icon(Icons.key,
+                        color: Colors.black,),
+                        filled: true,
+                        fillColor: Color.fromARGB(255, 255, 255, 255),
+                        border:  OutlineInputBorder(
+                         
+                        ),
+                      ),
+                    ),
+                    ),
+                    const SizedBox(height:20),
                     SizedBox(
                       height:30,
                       width:200,
                      child:ElevatedButton(
                       style:ButtonStyle(
                         backgroundColor: MaterialStateProperty.all<Color>(const Color.fromARGB(255, 68, 68, 68)),
-                        shape: MaterialStateProperty.all<OutlinedBorder>(RoundedRectangleBorder(
+                        shape: MaterialStateProperty.all<OutlinedBorder>(const RoundedRectangleBorder(
                             borderRadius: BorderRadius.zero,)
                             ),
                       ),
                       onPressed: () {
                   
                 },
-                child:Text("Reset Password ",
+                child:const Text("Reset Password ",
                 textAlign: TextAlign.center,
                 style: TextStyle(
                    fontFamily: 'Montserrat', 

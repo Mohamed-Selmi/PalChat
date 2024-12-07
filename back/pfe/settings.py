@@ -9,7 +9,8 @@ https://docs.djangoproject.com/en/5.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
-
+from datetime import timedelta
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -25,12 +26,13 @@ SECRET_KEY = 'django-insecure-x0co5+wlc-)a@erkv3p9ksi4*c2z7o%qeipmq&ybpt=dl+)o@r
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', '192.168.1.3']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', '192.168.1.3','*']
 
 
 # Application definition
 
 INSTALLED_APPS = [
+    "daphne",
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -42,8 +44,13 @@ INSTALLED_APPS = [
     'accounts.apps.AccountsConfig',
     'django_rest_passwordreset',
     'rest_framework.authtoken',
+    'chat',
+    'friends'
+    
+ 
 ]
-
+ASGI_APPLICATION = "pfe.asgi.application"
+WSGI_APPLICATION = "pfe.wsgi.application"
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -55,7 +62,11 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'pfe.urls'
-
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels.layers.InMemoryChannelLayer"
+    }
+}
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -85,7 +96,8 @@ DATABASES = {
         'USER': 'root',
         'PASSWORD': 'root',
         'HOST':'localhost',
-        'PORT':'3306'
+        'PORT':'3306',
+        
     }
 }
 AUTH_USER_MODEL = 'accounts.AppUser'
@@ -96,6 +108,7 @@ REST_FRAMEWORK = {
     ),
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.SessionAuthentication',
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
 }
 
@@ -129,13 +142,16 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 
 USE_TZ = True
-
-
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'pfe/media') 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
 STATIC_URL = 'static/'
-
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(hours=24),
+    'USER_ID_FIELD': 'user_id'
+}
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
