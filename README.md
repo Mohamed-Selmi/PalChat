@@ -24,6 +24,15 @@
 <h2>Demonstration</h2>
 <h2>UML diagrams</h2>
 <h3>Global use case diagram</h3>
-![Alt text](https://github.com/Mohamed-Selmi/PalChat/blob/main/Global_use_case.jpg?raw=true "Global Use Case")
+<img src="https://github.com/Mohamed-Selmi/PalChat/blob/main/Global_use_case.jpg?raw=true" alt="Global Use Case" title="Global Use Case" />
+<h3>Global use case diagram</h3>
+<img src="https://github.com/Mohamed-Selmi/PalChat/blob/main/class_diagram.jpg?raw=true" alt="Global Use Case" title="Global Use Case" />
+<h3>Global use case diagram</h3>
+<img src="https://github.com/Mohamed-Selmi/PalChat/blob/main/login_sequence.jpg?raw=true" alt="Global Use Case" title="Global Use Case" />
+<h3>Global use case diagram</h3>
+<img src="https://github.com/Mohamed-Selmi/PalChat/blob/main/Authentication.jpg?raw=true" alt="Global Use Case" title="Global Use Case" />
+<h3>Global use case diagram</h3>
+<img src="https://github.com/Mohamed-Selmi/PalChat/blob/main/Friend_requests.jpg?raw=true" alt="Global Use Case" title="Global Use Case" />
+<h2>Logo</h2>
 <h2>Logo</h2>
 <h2>Screenshots</h2>
