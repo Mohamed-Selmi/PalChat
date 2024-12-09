@@ -23,16 +23,19 @@
 </center>
 <h2>Demonstration</h2>
 <h2>UML diagrams</h2>
-<h3>Global use case diagram</h3>
+<h3>Global Use Case</h3>
 <img src="https://github.com/Mohamed-Selmi/PalChat/blob/main/Global_use_case.jpg?raw=true" alt="Global Use Case" title="Global Use Case" />
-<h3>Global use case diagram</h3>
-<img src="https://github.com/Mohamed-Selmi/PalChat/blob/main/class_diagram.jpg?raw=true" alt="Global Use Case" title="Global Use Case" />
-<h3>Global use case diagram</h3>
-<img src="https://github.com/Mohamed-Selmi/PalChat/blob/main/login_sequence.jpg?raw=true" alt="Global Use Case" title="Global Use Case" />
-<h3>Global use case diagram</h3>
-<img src="https://github.com/Mohamed-Selmi/PalChat/blob/main/Authentication.jpg?raw=true" alt="Global Use Case" title="Global Use Case" />
-<h3>Global use case diagram</h3>
-<img src="https://github.com/Mohamed-Selmi/PalChat/blob/main/Friend_requests.jpg?raw=true" alt="Global Use Case" title="Global Use Case" />
+<h3>Class diagram:</h3>
+<img src="https://github.com/Mohamed-Selmi/PalChat/blob/main/class_diagram.jpg?raw=true" alt="Global Use Case" title="Class diagram" />
+<h3>Login sequence diagram</h3>
+<img src="https://github.com/Mohamed-Selmi/PalChat/blob/main/login_sequence.jpg?raw=true" alt="Global Use Case" title="Login sequence diagram" />
+
+<h3>Friend request sequence diagram</h3>
+<img src="https://github.com/Mohamed-Selmi/PalChat/blob/main/Friend_requests.jpg?raw=true" alt="Global Use Case" title="Friend request sequence diagram" />
 <h2>Logo</h2>
-<h2>Logo</h2>
-<h2>Screenshots</h2>
+<h2>Interfaces:</h2>
+<h3>Login & Registration</h3>
+<div style="display: flex; gap: 10px; justify-content: center;">
+  <img src="https://github.com/Mohamed-Selmi/PalChat/blob/main/Cahier%20de%20charges/interface/Screenshot_1717535473.png" title="Login interface" style="width: 45%; height: auto;">
+  <img src="https://github.com/Mohamed-Selmi/PalChat/blob/main/Cahier%20de%20charges/interface/Screenshot_1717535518.png" title="Login interface" style="width: 45%; height: auto;">
+</div>
