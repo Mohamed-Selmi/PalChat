@@ -1,6 +1,8 @@
 from django.db import models
 import urllib.parse
 from django.contrib.auth.base_user import BaseUserManager
+
+from django.contrib.auth.base_user import BaseUserManager
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.conf import settings
 class AppUserManager(BaseUserManager):

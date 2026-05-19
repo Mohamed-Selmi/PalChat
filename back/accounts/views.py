@@ -1,5 +1,6 @@
 from django.contrib.auth import get_user_model, login, logout
 from django.contrib.auth.tokens import default_token_generator
+from django.forms import ValidationError
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes
 from django.core.mail import send_mail
@@ -14,7 +15,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from .serializers import UserRegisterSerializer, UserLoginSerializer, UserSerializer,EditProfileSerializer
 from rest_framework import permissions, status
-from .validations import custom_validation, validate_email, validate_password
+from .validations import custom_validation, validate_email, validate_password,validate_username
 from django.core.mail import send_mail
 from pfe.settings import EMAIL_HOST_USER
 from rest_framework.permissions import IsAuthenticated
@@ -46,7 +47,7 @@ class UserLogin(APIView):
         if serializer.is_valid(raise_exception=True):
             user = serializer.check_user(data)
             login(request, user)
-            # Generate JWT tokens
+        
             refresh = RefreshToken.for_user(user)
             return Response({
                 'refresh': str(refresh),
@@ -102,12 +103,21 @@ class GetAllUsers(APIView):
 class EditProfile(APIView):
     permission_classes = (permissions.IsAuthenticated,)
     authentication_classes = (JWTAuthentication, SessionAuthentication)
+
     def put(self, request):
         serializer = EditProfileSerializer(request.user, data=request.data, partial=True)
         if serializer.is_valid():
+           
+            username = request.data.get('username')
+            try:
+                validate_username({'username': username})
+            except ValidationError as e:
+                return Response({'error': e.message}, status=status.HTTP_400_BAD_REQUEST)
+
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 class SearchUserView(APIView):
     permission_classes = (permissions.IsAuthenticated,)
     authentication_classes = (JWTAuthentication,SessionAuthentication)

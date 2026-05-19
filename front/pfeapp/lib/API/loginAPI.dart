@@ -1,7 +1,8 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
-import 'package:pfeapp/Mainpage/homeview.dart';
+import 'package:pfeapp/Mainpage/groups.dart';
+
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginAPI {
@@ -29,14 +30,13 @@ class LoginAPI {
         final String accessToken = responseData['access']; 
         final String refreshToken = responseData['refresh']; 
           
-        // Save tokens using shared_preferences
         SharedPreferences prefs = await SharedPreferences.getInstance();
         await prefs.setString('accessToken', accessToken);
         await prefs.setString('refreshToken', refreshToken);
 
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => const HomeView()),
+          MaterialPageRoute(builder: (context) =>  UserConversations()),
         );
       } else {
         print('Failed to sign-in. Error: ${response.statusCode}');

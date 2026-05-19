@@ -9,6 +9,7 @@ class Conversation(models.Model):
     name = models.CharField(max_length=256)
     last_message = models.CharField(max_length=1024, null=True)
     last_sent_user = models.ForeignKey(User, on_delete=models.PROTECT, null=True)
+    creator = models.ForeignKey(User, on_delete=models.CASCADE, related_name='conversation_creator')
     def __str__(self):
         return self.name
 
@@ -44,6 +45,6 @@ class UserInbox(models.Model):
 
 class GroupMembers(models.Model):
     user = models.ForeignKey(User, on_delete=models.PROTECT)
-    conversation = models.ForeignKey(Conversation, on_delete=models.PROTECT)
+    conversation = models.ForeignKey(Conversation, on_delete=models.CASCADE)
     joined_at = models.DateTimeField(auto_now_add=True)
     left_at = models.DateTimeField(blank=True, null=True)

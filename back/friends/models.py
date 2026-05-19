@@ -21,11 +21,10 @@ class FriendRequest(models.Model):
             self.save()
     def DeclineFriendRequest(self):
         self.active_status=False
-        self.save()
+        self.delete()
     def CancelFriendRequest(self):
-        #same as the decline but for the sender's perspective 
         self.active_status=False
-        self.save()
+        self.delete()
 
 
 class FriendList(models.Model):
@@ -41,12 +40,11 @@ class FriendList(models.Model):
         if friend in self.friends.all():
             self.friends.remove(friend)
     def unfriend(self,friend):
-        remover_friendlist=self
-        remover_friendlist.remove_friend(friend)
-        removed_user_friendlist  = FriendList.objects.get(user=friend)
-        removed_user_friendlist.remove_friend(remover_friendlist.user)
+        self.remove_friend(friend)
+        friend_list = FriendList.objects.get(user=friend)
+        friend_list.remove_friend(self.user)
     def is_friend(self,friend):
-        return self.friends.filter(pk=friend.pk).exists()
+        return self.friends.filter(user_id=friend.user_id).exists()
     def get_friends(self):
         return self.friends.all()
         

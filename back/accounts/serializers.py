@@ -1,5 +1,6 @@
 from django.forms import ValidationError
 from rest_framework import serializers
+from .validations import validate_username
 from django.contrib.auth import get_user_model, authenticate
 
 UserModel = get_user_model()
@@ -35,8 +36,7 @@ class UserSerializer(serializers.ModelSerializer):
 class EditProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserModel
-        fields = ('username', 'picture')  # Assuming 'picture' is the field for profile picture
-
+        fields = ('username', 'picture')  	
     def update(self, instance, validated_data):
         instance.username = validated_data.get('username', instance.username)
         instance.picture = validated_data.get('picture', instance.picture)

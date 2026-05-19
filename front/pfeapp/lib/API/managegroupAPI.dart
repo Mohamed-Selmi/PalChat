@@ -30,6 +30,33 @@ final String baseUrl = "http://192.168.1.3:8000/chat";
     throw Exception('Failed to create group');
   }
 }
+static Future<Map<String, dynamic>> deleteGroup(int groupId) async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  String? accessToken = prefs.getString('accessToken');
+  if (accessToken == null) {
+    throw Exception('Access token not found');
+  }
+
+  final response = await http.delete(
+    Uri.parse('http://192.168.1.3:8000/chat/delete-group/$groupId/'),
+    headers: {
+      'Authorization': 'Bearer $accessToken',
+    },
+  );
+
+  if (response.statusCode == 203) {
+    return {'status': true, 'message': 'Group deleted successfully'};
+  } else if (response.statusCode == 303) {
+    return {'status': false, 'message': 'You are not the creator of this group'};
+  } else if (response.statusCode == 303) {
+    return {'status': false, 'message': 'Group not found'};
+  } else {
+    throw Exception('Failed to delete group');
+  }
+}
+
+
+
 
     static Future<String?> addMemberToGroup(int groupId, String email) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -120,4 +147,73 @@ final String baseUrl = "http://192.168.1.3:8000/chat";
               throw Exception('Failed to connect to the server');
             }
           }
+ static Future<bool> removeMember(int groupId, int userID) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? accessToken = prefs.getString('accessToken');
+   if (accessToken == null) {
+      throw Exception('Access token not found');
+    }
+
+    final String apiUrl = 'http://192.168.1.3:8000/chat/group-detail/$groupId/remove-members/';
+    Map<String, dynamic> requestBody = {
+      'member_id': userID,
+    };
+     print('Request Body: $requestBody');
+    try {
+      final response = await http.post(
+        Uri.parse(apiUrl),
+        headers: {
+          'Authorization': 'Bearer $accessToken',
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode(requestBody),
+      );
+
+     if (response.statusCode == 200) {
+      return true; 
+    } else {
+      final responseBody = json.decode(response.body);
+      final errorMessage = responseBody['message'] ?? 'Failed to remove user';
+      print('Error: $errorMessage');
+      throw Exception(errorMessage); 
+    }
+    } catch (e) {
+     throw Exception('Failed to connect to the server');
+    }
+  }
+
+
+static Future<bool> leaveGroup(int groupId) async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  String? accessToken = prefs.getString('accessToken');
+  if (accessToken == null) {
+    throw Exception('Access token not found');
+  }
+
+  final String apiUrl = 'http://192.168.1.3:8000/chat/leave-group/$groupId/';
+  
+  try {
+    final response = await http.post(
+      Uri.parse(apiUrl),
+      headers: {
+        'Authorization': 'Bearer $accessToken',
+        'Content-Type': 'application/json',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      return true; 
+    } else {
+      final responseBody = json.decode(response.body);
+      final errorMessage = responseBody['message'] ?? 'Failed to leave the group';
+      print('Error: $errorMessage');
+      throw Exception(errorMessage); 
+    }
+  } catch (e) {
+    throw Exception('Failed to connect to the server');
+  }
+}
+
+
+
         }

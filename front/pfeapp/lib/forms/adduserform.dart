@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pfeapp/API/managegroupAPI.dart';
-
+import 'package:pfeapp/models/user.dart';
+import 'package:pfeapp/API/friendListAPI.dart';
 class AddUserWidget extends StatefulWidget {
     final int groupId;
   const AddUserWidget({required this.groupId, Key? key}) : super(key: key);
@@ -9,70 +10,94 @@ class AddUserWidget extends StatefulWidget {
 }
 
 class _AddUserWidgetState extends State<AddUserWidget> {
-   TextEditingController emailController = TextEditingController();
+   late Future<List<User>> _futureUsers;
+  void initState() {
+    super.initState();
+    _futureUsers = FriendListAPI.fetchAllUsers();
+  }
 
-    @override
+ 
+
+  @override
   Widget build(BuildContext context) {
-    return  Scaffold(
-        appBar: AppBar(
-        title: const Text('Add Member '),
+    return Scaffold(
+      backgroundColor: const Color(0xfff2f2f2),
+      appBar: AppBar(
+        backgroundColor: const Color(0xfff2f2f2),
+        title: const Text('Add your friends'),
       ),
-      resizeToAvoidBottomInset: false,
-      backgroundColor: const Color(0xffd1dff6),
-      body : Container(
-        child:Center(
-          child: Column(
-            children: [
-              const SizedBox(height: 250,),
-              SizedBox(height: 40,width:300,
-                        child:TextField(
-                       
-                        enableSuggestions: true,
-                        autocorrect: false,
-                        controller: emailController,
-                        style: const TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
-                        decoration: const InputDecoration(
-                          contentPadding: EdgeInsets.symmetric(vertical: 1.0),
-                          hintText: 'Enter email ',
-                          prefixIcon: Icon(Icons.key,
-                          color: Colors.black,),
-                          filled: true,
-                          fillColor: Color.fromARGB(255, 255, 255, 255),
-                          border:  OutlineInputBorder(                       
-                          ),
-                        ),
-                      ),
-                      ),
-                           SizedBox(
-                        height:30,
-                        width:200,
-                       child:ElevatedButton(
-                        style:ButtonStyle(
-                          backgroundColor: MaterialStateProperty.all<Color>(const Color(0xffc2d6f6)),
-                          shape: MaterialStateProperty.all<OutlinedBorder>(const RoundedRectangleBorder(
-                              borderRadius: BorderRadius.zero,)
+      body: Column(
+        children: [
+            Expanded(
+              child: FutureBuilder<List<User>>(
+                future: _futureUsers,
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(child: CircularProgressIndicator());
+                  } else if (snapshot.hasError) {
+                    return Center(child: Text('Error: ${snapshot.error}'));
+                  } else if (snapshot.hasData && snapshot.data != null) {
+                    return ListView.builder(
+                      itemCount: snapshot.data!.length,
+                      itemBuilder: (context, index) {
+                        final user = snapshot.data![index];
+                        return SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.1,
+                          width: MediaQuery.of(context).size.width * 0.9,
+                          child: Card(
+                            color: const Color(0xfff5e1da),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: ListTile(
+                              
+                              subtitle: Text(
+                                user.email,
+                                style: const TextStyle(
+                                  fontFamily: 'Montserrat',
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.bold,
+                                  color: Color(0xff011c27),
+                                ),
                               ),
-                        ),
-                        onPressed: () {
-                    ManageGroupAPI.addMemberToGroup(
-                      widget.groupId,
-                      emailController.text,
+                              title: Text(
+                                user.username,
+                                style: const TextStyle(
+                                  fontFamily: 'Montserrat',
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.bold,
+                                  color: Color(0xff011c27),
+                                ),
+                              ),
+                              leading: CircleAvatar(
+                                radius: 23,
+                                backgroundImage: user.pictureUrl != null
+                                    ? NetworkImage(user.pictureUrl!)
+                                    : const AssetImage('assets/images/default_profile_picture.png')
+                                        as ImageProvider<Object>,
+                              ),
+                               trailing:                                                                                        
+                                                    IconButton(
+                                                      icon: const Icon(Icons.person_add),
+                                                      color: Colors.green,
+                                                      iconSize: 40,
+                                                      onPressed: () {
+                                                        ManageGroupAPI.addMemberToGroup(widget.groupId,user.email);
+                                                      },
+                                                    ),
+                            ),
+                          ),
+                        );
+                      },
                     );
-                  },
-                  child:const Text("Add",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                     fontFamily: 'Montserrat', 
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    color:  Color(0xff333333)
-                  ),
-                  ),
+                  } else {
+                    return const Center(child: Text('No Users Found'));
+                  }
+                },
+              ),
             ),
-                      ),
-          ],),
-        )
-      ),
-    );
+        ]
+              ),
+            );
   }
 }

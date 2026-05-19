@@ -22,43 +22,33 @@ class RegisterCard extends State<Registerview> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-          resizeToAvoidBottomInset: false,
-        backgroundColor: Color(0xffd1dff6),
+          resizeToAvoidBottomInset: true,
+        backgroundColor: const Color(0xfff2f2f2),
           
-          body:Container(
-            margin: const EdgeInsets.only(top: 40.0),
-            color:const Color.fromARGB(0, 255, 255, 255),
-            child: Column(children: [
-              const SizedBox(height:10,),
-              Container(
-                child:const Text('Welcome To PalChat',
+          body:SingleChildScrollView(
+            child: Container(
+              margin: const EdgeInsets.only(top: 40.0),
+              color:const Color.fromARGB(0, 255, 255, 255),
+              child: Column(children: [
+                const SizedBox(height:10,),
+                const Text('Welcome To PalChat',
                 textAlign: TextAlign.center,
                 style:TextStyle(
                   fontFamily: 'Aleo',
                       fontStyle: FontStyle.normal,
                       fontWeight: FontWeight.bold,
                       fontSize: 25.0,
-                      color: Colors.black
+                      color: Color(0xff011c27)
                 )),
-                  
-              ),
-                Container(
-                  child:SizedBox(
-                      width: double.infinity,
-                  height: MediaQuery.of(context).size.height * 0.3,
-                  child:Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                    
+              SizedBox(
+                    height:MediaQuery.of(context).size.height * 0.45,
                       child: SvgPicture.asset(
-                       'assets/images/logo2.svg',
-                        fit: BoxFit.cover,),
-                    
-                  ),
-                  ),
-                ),
-                Container(
-                  child:Column(children: [
-                    SizedBox(height: 40, width:300,
+                        'assets/images/applogo.svg',                      
+                      ),
+                    ), 
+            
+                  Column(children: [
+                    SizedBox(height:MediaQuery.of(context).size.height * 0.05, width:MediaQuery.of(context).size.width * 0.8,
                      
                       child:TextField(
                       
@@ -66,22 +56,22 @@ class RegisterCard extends State<Registerview> {
                       autocorrect: false,
                       keyboardType: TextInputType.text,
                       controller: usernameController,
-                      style: const TextStyle(color: Color.fromARGB(255, 0, 0, 0),),
+                      style: const TextStyle(color: Color(0xff011c27),),
                       decoration: const InputDecoration(
                         contentPadding: EdgeInsets.symmetric(vertical: 1.0),
                         hintText: 'Enter your Username',
                         prefixIcon: Icon(Icons.person,
-                        color: Colors.black,),
+                        color: Color((0xff011c27)),),
                         filled: true,
-                        fillColor: Color.fromARGB(255, 255, 255, 255),
+                        fillColor: Color(0xfff5e1da),
                         border:  OutlineInputBorder(
                          
                         ),
                       ),
                     ),
                     ),
-                     const SizedBox(height:20),
-                     SizedBox(height: 40, width:300,
+                     SizedBox(height:MediaQuery.of(context).size.height * 0.02,),
+                     SizedBox(height:MediaQuery.of(context).size.height * 0.05, width:MediaQuery.of(context).size.width * 0.8,
                      
                       child:TextField(
                       
@@ -89,48 +79,47 @@ class RegisterCard extends State<Registerview> {
                       autocorrect: false,
                       keyboardType: TextInputType.emailAddress,
                       controller: emailController,
-                      style: const TextStyle(color: Color.fromARGB(255, 0, 0, 0),),
+                      style: const TextStyle(color: Color(0xff011c27),),
                       decoration: const InputDecoration(
                         contentPadding: EdgeInsets.symmetric(vertical: 1.0),
                         hintText: 'Enter your Email Address',
                         prefixIcon: Icon(Icons.mail,
-                        color: Colors.black,),
+                        color: Color((0xff011c27)),),
                         filled: true,
-                        fillColor: Color.fromARGB(255, 255, 255, 255),
-                        border:  OutlineInputBorder(
-                         
+                        fillColor: Color(0xfff5e1da),
+                        border:  OutlineInputBorder(                      
                         ),
                       ),
                     ),
                     ),
-                     const SizedBox(height: 20),
-                       SizedBox(height: 40,width:300,
+                     SizedBox(height:MediaQuery.of(context).size.height * 0.02,),
+                       SizedBox(height: MediaQuery.of(context).size.height * 0.05,width:MediaQuery.of(context).size.width * 0.8,
                       child:TextField(
                        obscureText: true,
                       enableSuggestions: false,
                       autocorrect: false,
                       controller: passwordController,
-                      style: const TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
+                      style: const TextStyle(color: Color(0xff011c27)),
                       decoration: const InputDecoration(
                         contentPadding: EdgeInsets.symmetric(vertical: 1.0),
                         hintText: 'Enter your password',
                         prefixIcon: Icon(Icons.key,
-                        color: Colors.black,),
+                        color: Color((0xff011c27)),),
                         filled: true,
-                        fillColor: Color.fromARGB(255, 255, 255, 255),
+                        fillColor: Color(0xfff5e1da),
                         border:  OutlineInputBorder(
                          
                         ),
                       ),
                     ),
                     ),
-                    const SizedBox(height:20),
+                    SizedBox(height:MediaQuery.of(context).size.height * 0.02,),
                     SizedBox(
-                      height:30,
-                      width:200,
+                     height:MediaQuery.of(context).size.height * 0.045,
+                      width:MediaQuery.of(context).size.width * 0.45,
                      child:ElevatedButton(
                       style:ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all<Color>(const Color.fromARGB(255, 68, 68, 68)),
+                        backgroundColor: MaterialStateProperty.all<Color>(const Color(0xffe28413)),
                         shape: MaterialStateProperty.all<OutlinedBorder>(const RoundedRectangleBorder(
                             borderRadius: BorderRadius.zero,)
                             ),
@@ -142,139 +131,74 @@ class RegisterCard extends State<Registerview> {
                     emailController.text,
                     passwordController.text,
                   );
-                },
-                child:const Text("Register",
-                textAlign: TextAlign.center,
-                style: TextStyle(
+                                  },
+                                  child:const Text("Register",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
                    fontFamily: 'Montserrat', 
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
-                  color: Color.fromARGB(255, 255, 255, 255),
-                ),
-                ),
-  ),
+                  color: Color(0xff011c27),
+                                  ),
+                                  ),
                     ),
-                    const SizedBox(height:10),
+                    ),
+                    SizedBox(height:MediaQuery.of(context).size.height * 0.02,),
                     
                     
                     ],
                     ),
-                ),
-                const SizedBox(height:20),
-              Container(
-                child:Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, 
-                  children: [
-                  Container(
-                    width: 123,
-                    decoration: const ShapeDecoration(
-                      shape: RoundedRectangleBorder(
-                        side: BorderSide(
-                          width: 1,
-                          strokeAlign: BorderSide.strokeAlignCenter,
+                 SizedBox(height:MediaQuery.of(context).size.width * 0.08,),
+                FractionallySizedBox(
+                    widthFactor: 1.0, 
+                    child: Container(
+                      decoration: const ShapeDecoration(
+                        shape: RoundedRectangleBorder(
+                          side: BorderSide(
+                            width: 1,
+                            strokeAlign: BorderSide.strokeAlignCenter,
+                          ),
                         ),
                       ),
                     ),
                   ),
-                  const Text(
-                    'Or sign-in with!',
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 15,
-                      fontFamily: 'Roboto',
-                      fontWeight: FontWeight.normal,
-                      height: 0,
-                    ),
-                  ),
-                  Container(
-                    width: 123,
-                    decoration: const ShapeDecoration(
-                      shape: RoundedRectangleBorder(
-                        side: BorderSide(
-                          width: 1,
-                          strokeAlign: BorderSide.strokeAlignCenter,
-                        ),
-                      ),
-                    ),
-                  ),
-        
-                ],
-                ),
-              ),
-              const SizedBox(height:20,),
-              Container(
-                child:Row(mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                  
-                  IconButton(
-                      iconSize: 50,
-                      icon: const FaIcon(FontAwesomeIcons.google,
-                      color:Color.fromARGB(255, 0, 0, 0)),
-                      onPressed: () {
-                            print("google icon pressed");
-                      },
-                    ),
+                   SizedBox(height:MediaQuery.of(context).size.height * 0.045,),
+                  SizedBox(
                     
-                     IconButton(
-                      iconSize: 50,
-                      icon: const FaIcon(FontAwesomeIcons.facebook,
-                      color:Color.fromARGB(255, 0, 0, 0)),
-                      onPressed: () {
-                            print("whatsapp icon pressed");
-                                },
-                              ),
-
-                ],),
-              ),
-              const SizedBox(height:30,),
-              FractionallySizedBox(
-                  widthFactor: 1.0, // Set width to 100% of the screen
-                  child: Container(
-                    decoration: const ShapeDecoration(
-                      shape: RoundedRectangleBorder(
-                        side: BorderSide(
-                          width: 1,
-                          strokeAlign: BorderSide.strokeAlignCenter,
+                    width:MediaQuery.of(context).size.width * 0.8,
+                    child:Center(
+                      child: RichText(
+                        text:TextSpan(
+                          text: "Already have an account? ",
+                        style: const TextStyle(
+                                    color: Color(0xff011c27),
+                                                      fontFamily: 'Roboto', 
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.normal,),
+                        children: <TextSpan>[
+                          TextSpan(
+                                  text: 'Sign in!',
+                                    style: const TextStyle(
+                                     decoration: TextDecoration.underline,
+                                    color: Color(0xff0e79b2),
+                                                      fontFamily: 'Roboto', 
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.bold,
+                                          ),
+                                          recognizer: TapGestureRecognizer()
+                        ..onTap = () {
+                           Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(builder: (context) => const LoginView()),
+                        );
+                        }),
+                        ],
                         ),
                       ),
                     ),
                   ),
-                ),
-                const SizedBox(height:20),
-                SizedBox(
-                  
-                  width:250,
-                  child:Center(
-                    child: RichText(
-                      text:TextSpan(
-                        text: "Already have an account? ",
-                      style: const TextStyle(
-                                  color: Color.fromARGB(255, 0, 0, 0),
-                                                    fontFamily: 'Roboto', 
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.normal,),
-                      children: <TextSpan>[
-                        TextSpan(
-                                text: 'Sign in!',
-                                  style: const TextStyle(
-                                   decoration: TextDecoration.underline,
-                                  color: Color.fromARGB(255, 13, 138, 255),
-                                                    fontFamily: 'Roboto', 
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.bold,
-                                        ),
-                                        recognizer: TapGestureRecognizer()
-                      ..onTap = () {
-                         Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(builder: (context) => const LoginView()),
-                      );
-                      }),
-                      ],
-                      ),
-                    ),
-                  ),
-                ),
-            ],
+              ],
+              ),
             ),
           ),
           

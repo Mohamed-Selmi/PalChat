@@ -23,7 +23,6 @@ class ChatAPI {
           'Content-Type': 'application/json',
         },
       );
-
       if (response.statusCode == 200) {
         final Map<String, dynamic> responseData = json.decode(response.body);
         final List<dynamic> content = responseData['content'] as List<dynamic>;

@@ -13,36 +13,71 @@ User = get_user_model()
 
 class SendFriendRequestView(APIView):
     permission_classes = (IsAuthenticated,)
-    def post(self,request):
-        sending_user=request.user
-        receiving_user=request.data.get('receiving_user')
+
+    def post(self, request):
+        sending_user = request.user
+        receiving_user_id = request.data.get('receiving_user')
+
+        friend_list, created = FriendList.objects.get_or_create(user=sending_user)
+
+        if sending_user.user_id == receiving_user_id:
+            return Response({'status': False, 'message': 'Cannot send friend request to yourself.'}, status=status.HTTP_400_BAD_REQUEST)
+
         try:
-            receiver = User.objects.get(user_id=receiving_user)
+            receiver = User.objects.get(user_id=receiving_user_id)
         except User.DoesNotExist:
-            return Response({'status': False, 'message': 'Receiver user not found.'}, status=status.HTTP_404_NOT_FOUND)     
-        friend_request = FriendRequest.objects.create(sender=sending_user, receiver=receiver, active_status=True)   
+            return Response({'status': False, 'message': 'Receiver user not found.'}, status=status.HTTP_404_NOT_FOUND)
+
+        existing_request = FriendRequest.objects.filter(sender=sending_user, receiver=receiver)
+        if existing_request.exists():
+            return Response({'status': False, 'message': 'Friend request already sent.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        if friend_list.is_friend(receiver):
+            return Response({'status': False, 'message': 'You are already friends with this user.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        friend_request = FriendRequest.objects.create(sender=sending_user, receiver=receiver, active_status=True)
         content = {
             'sender': sending_user.username,
             'receiver': receiver.username,
             'friend_request': friend_request.active_status
         }
         return Response({'status': True, 'message': 'Friend request sent successfully.', 'data': content}, status=status.HTTP_201_CREATED)
+
+
     
 
 class ShowFriendRequestsView(APIView):
     permission_classes = (IsAuthenticated,)
     serializer_class = ShowFriendRequestSerializer
+
     def get(self,request):
         user=request.user
         requests=FriendRequest.objects.filter(receiver=user,active_status=True)
-        friendrequests=list(requests.values('id', 'sender__user_id', 'sender__username', 'sender__picture'))
+        serializer = self.serializer_class(requests, many=True)
         response_data={
             'status': True,
             'message': 'User Friend requests',
-            'content':friendrequests,
+            'content': serializer.data,
         }
         return Response(response_data,status=status.HTTP_200_OK)
     
+
+class ShowSentFriendRequestsView(APIView):
+    permission_classes = (IsAuthenticated,)
+    serializer_class = ShowFriendRequestSerializer
+
+    def get(self,request):
+        user=request.user
+        requests=FriendRequest.objects.filter(sender=user,active_status=True)
+        serializer = self.serializer_class(requests, many=True)
+        response_data={
+            'status': True,
+            'message': 'User Friend requests',
+            'content': serializer.data,
+        }
+        return Response(response_data,status=status.HTTP_200_OK)
+    
+
 
 class AcceptFriendRequestView(APIView):
     permission_classes = [IsAuthenticated]
@@ -97,25 +132,29 @@ class ShowFriendsView(APIView):
             return Response(str(e), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
-class CancelFriendRequestView(APIView):
-    pass 
+class RemoveFriendView(APIView):
+    authentication_classes = [JWTAuthentication, SessionAuthentication]
+    permission_classes = [IsAuthenticated]
+    def post(self,request):
+            friend_id=request.data.get('friend_id')
+            user=request.user
+            friend = User.objects.get(user_id=friend_id)
+            user_friend_list = FriendList.objects.get(user=user)
+            user_friend_list.unfriend(friend)
+            return Response({'message': 'Friend removed successfully'}, status=status.HTTP_200_OK)
+
+
+
+
 
 
 class VisitUserProfile(APIView):
     permission_classes = (IsAuthenticated,)
-    def get(self, request, email):
+    def get(self, request, user_id):
         try:
-            authenticated_user = request.user
 
-            profile_user = User.objects.get(email=email)
 
-            try:
-                friend_list_user = FriendList.objects.get(
-                    user=authenticated_user)
-            except:
-                friend_list_user = None
-
-            user_friend = False
+            profile_user = User.objects.get(user_id=user_id)
 
             content = {
                 'user_id': profile_user.user_id,
@@ -126,55 +165,6 @@ class VisitUserProfile(APIView):
                 'sender': False,
                 'receiver': False
             }
-
-            if friend_list_user:
-                if friend_list_user.is_friend(profile_user):
-                    user_friend = True
-
-                    content['are_friends'] = True
-
-                    response_content = {
-                        'status': True,
-                        'message': 'User Profile Data',
-                        'data': content
-                    }
-                    return Response(response_content, status=status.HTTP_200_OK)
-
-            if not user_friend:
-                try:
-                    friend_request_sender = FriendRequest.objects.filter(
-                        sender=authenticated_user, receiver=profile_user)
-                except:
-                    friend_request_sender = None
-
-                if friend_request_sender:
-                    content['sender'] = True
-
-                    response_content = {
-                        'status': True,
-                        'message': 'User Profile Data',
-                        'data': content
-                    }
-
-                    return Response(response_content, status=status.HTTP_200_OK)
-
-            if not friend_request_sender:
-                try:
-                    friend_request_receiver = FriendRequest.objects.filter(
-                        sender=profile_user, receiver=authenticated_user)
-                except:
-                    friend_request_receiver = None
-
-                if friend_request_receiver:
-                    content['receiver'] = True
-
-                    response_content = {
-                        'status': True,
-                        'message': 'User Profile Data',
-                        'data': content
-                    }
-
-                    return Response(response_content, status=status.HTTP_200_OK)
 
             response_content = {
                 'status': True,

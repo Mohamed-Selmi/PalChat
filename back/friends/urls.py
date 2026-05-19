@@ -10,5 +10,7 @@ urlpatterns = [
     path('cancel-friend-request/<int:friend_request_id>/', CancelFriendRequestView.as_view(), name='cancel_friend_request'),
     path('show-friends/', ShowFriendsView.as_view(), name='show_friends'),
     path('cancel-friend-request/', CancelFriendRequestView.as_view(), name='cancel_friend_request'),
-    path('visit-user-profile/<str:email>/', VisitUserProfile.as_view(), name='visit_user_profile')
+    path('visit-user-profile/<int:user_id>/', VisitUserProfile.as_view(), name='visit_user_profile'),
+    path('remove-friend/', RemoveFriendView.as_view(), name='remove_friend'),
+    path('sent-friend-requests/', ShowSentFriendRequestsView.as_view(), name='sent_friend_requests'),
 ]

@@ -106,7 +106,11 @@ class ChatConsumer(AsyncWebsocketConsumer):
             'message_id': message.id,
             'message_conversation': conversation.id,
             'message_content': message.content,
-            'message_sender': message.sender.username,
+            'message_sender': {
+                'user_id': message.sender.user_id,
+                'username': message.sender.username,
+            },
+            
             'message_timestamp': str(message.timestamp),
             'message_image_url': message.get_picture_url(), 
             

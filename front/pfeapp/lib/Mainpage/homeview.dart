@@ -5,7 +5,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'dart:convert';
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:pfeapp/Mainpage/chatroom.dart';
+
 import 'package:pfeapp/Mainpage/friendlist.dart';
 
 import 'package:provider/provider.dart';
@@ -51,7 +51,7 @@ void initState() {
  
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+      backgroundColor: const Color(0xfff2f2f2),
               
       bottomNavigationBar: ConvexAppBar(
     items: const [
@@ -70,7 +70,7 @@ void initState() {
           else if (i == 2 ) {
              Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => UserConversations()), // Navigate to ConversationsWidget
+      MaterialPageRoute(builder: (context) => UserConversations()), 
     );
           }  
                     else if (i == 3 ) {

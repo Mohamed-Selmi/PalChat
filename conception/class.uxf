@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="15.1">
+  <zoom_level>12</zoom_level>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>636</x>
+      <y>132</y>
+      <w>252</w>
+      <h>396</h>
+    </coordinates>
+    <panel_attributes>*User*
+bg=red
+--
+-user_id: int
+-username: String
+-email:String
+-password:String
+-ProfilePicture: Image
+-Profile bio:String
+
+--
++login()
++register()
++password_reset()
++update_profile()
++search_user()
++View_conversation_list()
++View_Friend_list
++get_picture_url()
++Send_Friend_Request()
++remove_friend()
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>132</x>
+      <y>132</y>
+      <w>252</w>
+      <h>216</h>
+    </coordinates>
+    <panel_attributes>*Conversation*
+bg=red
+--
+-id: Int
+-name: String
+--
++Add_Group_Members()
++Group_Detail()
++CreateGroup()
++Fetch_group_messages()
++leave_group()
++Delete_group()
++remove_member()
+
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>132</x>
+      <y>456</y>
+      <w>252</w>
+      <h>144</h>
+    </coordinates>
+    <panel_attributes>*Message*
+bg=yellow
+--
+-Timpstamp:DateTime=timezone.now()
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1104</x>
+      <y>216</y>
+      <w>252</w>
+      <h>228</h>
+    </coordinates>
+    <panel_attributes>*Friend Request*
+bg=red
+--
+-id: Int
+-active_status: boolean
+-created_at: DateTime
+--
++Accept_Friend_Request()
++Decline_Friend_Request()
++Cancel_Friend_Request()
+
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>240</x>
+      <y>336</y>
+      <w>60</w>
+      <h>144</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-
+m2=0..*</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;100.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>876</x>
+      <y>324</y>
+      <w>252</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>lt=-
+m1=1
+m2=0..*
+* send*</panel_attributes>
+    <additional_attributes>10.0;20.0;190.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>372</x>
+      <y>480</y>
+      <w>288</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>lt=-
+m1=1
+m2=0..*
+* send*</panel_attributes>
+    <additional_attributes>220.0;20.0;10.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>876</x>
+      <y>372</y>
+      <w>252</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>lt=-
+m1=1
+m2=0..*
+*Receive*</panel_attributes>
+    <additional_attributes>10.0;20.0;190.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>12</x>
+      <y>708</y>
+      <w>240</w>
+      <h>96</h>
+    </coordinates>
+    <panel_attributes>*Image*
+bg=yellow
+--
+-url:String
+--
++get_picture_url()
+
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>360</x>
+      <y>708</y>
+      <w>240</w>
+      <h>96</h>
+    </coordinates>
+    <panel_attributes>*Text*
+bg=yellow
+--
+-content:String
+--
++getContent()</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>372</x>
+      <y>204</y>
+      <w>288</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>lt=-
+m1=0..*
+m2=1..*
+* member*</panel_attributes>
+    <additional_attributes>10.0;20.0;220.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>372</x>
+      <y>276</y>
+      <w>288</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>lt=-
+m1=0..*
+m2=1
+* Creator*</panel_attributes>
+    <additional_attributes>10.0;20.0;220.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>252</x>
+      <y>588</y>
+      <w>36</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;80.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>876</x>
+      <y>180</y>
+      <w>180</w>
+      <h>108</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-
+is friend
+m1=0..*
+m2=0..*</panel_attributes>
+    <additional_attributes>10.0;60.0;80.0;60.0;80.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>108</x>
+      <y>660</y>
+      <w>372</w>
+      <h>72</h>
+    </coordinates>
+    <panel_attributes>lt=-
+</panel_attributes>
+    <additional_attributes>290.0;40.0;290.0;20.0;10.0;20.0;10.0;40.0</additional_attributes>
+  </element>
+</diagram>

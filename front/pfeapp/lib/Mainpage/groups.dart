@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:pfeapp/API/managegroupAPI.dart';
 import 'package:pfeapp/models/conversation.dart';
+import 'package:pfeapp/Mainpage/convex_app_bar.dart';
+
 import 'package:pfeapp/forms/creategroupform.dart';
 import 'package:pfeapp/Messaging/chatscreen.dart';
 class UserConversations extends StatefulWidget {
@@ -26,8 +28,22 @@ class _UserConversationsState extends State<UserConversations> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0xfff2f2f2),
       appBar: AppBar(
-        title: Text('User Conversations'),
+        backgroundColor: const Color(0xfff2f2f2),
+        title: const Text('User Conversations'),
+        actions: [
+    IconButton(
+      icon: const Icon(Icons.add), 
+      iconSize: 32.0,
+      onPressed: () {
+  Navigator.pushReplacement(
+                   context,
+                   MaterialPageRoute(builder: (context) => const CreateGroupWidget()),
+                  );
+      },
+    ),
+  ],
       ),
       body: Column(
         children: [
@@ -35,7 +51,7 @@ class _UserConversationsState extends State<UserConversations> {
             future: _conversationsFuture,
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return Center(child: CircularProgressIndicator());
+                return const Center(child: CircularProgressIndicator());
               } else if (snapshot.hasError) {
                 return Center(child: Text('Erroaar: ${snapshot.error}'));
               } else {
@@ -47,10 +63,10 @@ class _UserConversationsState extends State<UserConversations> {
                       return Column(
                         children: [
                          
-                          SizedBox(height:70,
-                              width:320,
+                          SizedBox(height: MediaQuery.of(context).size.height * 0.09, width:MediaQuery.of(context).size.width * 0.9,
                             child: Container(decoration: BoxDecoration(
-                                          border: Border.all(color: const Color.fromARGB(255, 23, 82, 211)),
+                                          color: const Color(0xfff5e1da),
+                                          border: Border.all(color: const Color(0xff011c27)),
                                           borderRadius: BorderRadius.circular(10),                              
                                         ),
                               child: ListTile(
@@ -60,7 +76,7 @@ class _UserConversationsState extends State<UserConversations> {
                                   fontFamily: 'Montserrat',
                                   fontSize: 15,
                                   fontWeight: FontWeight.bold,
-                                  color: Color.fromARGB(255, 0, 0, 0),
+                                  color: Color(0xff011c27),
                                 ),
                               ),
                               subtitle: Row(
@@ -72,18 +88,22 @@ class _UserConversationsState extends State<UserConversations> {
                                       fontFamily: 'Montserrat',
                                       fontSize: 10,
                                       fontWeight: FontWeight.bold,
-                                      color: Color.fromARGB(255, 0, 0, 0),
+                                      color: Color(0xff011c27),
                                     ),
                                   ),
-                                  Text(
-                                    conversation.last_message ?? 'No last message',
-                                    style: const TextStyle(
-                                      fontFamily: 'Montserrat',
-                                      fontSize: 10,
-                                      fontWeight: FontWeight.bold,
-                                      color: Color.fromARGB(255, 0, 0, 0),
-                                    ),
+                                 Text(
+                                  conversation.last_message != null
+                                      ? conversation.last_message!.length > 35
+                                          ? conversation.last_message!.substring(0, 35) + '...'
+                                          : conversation.last_message!
+                                      : 'No last message',
+                                  style: const TextStyle(
+                                    fontFamily: 'Montserrat',
+                                    fontSize: 10, // Increase the font size for better visibility
+                                    fontWeight: FontWeight.bold,
+                                    color: Color(0xff011c27),
                                   ),
+                                ),
                                   
                                 ],
                               ),
@@ -101,7 +121,7 @@ class _UserConversationsState extends State<UserConversations> {
 
                             ),
                           ),
-                          SizedBox(height:30),
+                          SizedBox(height:MediaQuery.of(context).size.height * 0.025,),
                         ],
                       );
                     },
@@ -111,42 +131,15 @@ class _UserConversationsState extends State<UserConversations> {
             },
           ),
           
-             SizedBox(
-                                  height:50,
-                                  width:300,
-                                  child: Card(                                        
-                                                clipBehavior: Clip.hardEdge,
-                                                                child: InkWell(
-                                  splashColor: Colors.blue.withAlpha(30),
-                                  onTap: () {
-                                   Navigator.pushReplacement(
-                                        context,
-                                        MaterialPageRoute(builder: (context) => const CreateGroupWidget()),
-                                      );
-                                  },
-                                  child: const Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    crossAxisAlignment: CrossAxisAlignment.center,
-                                    children: [
-                                       Icon(Icons.logout,color: Color.fromARGB(255, 1, 21, 75),),
-                                       Align(
-                                          alignment: Alignment.centerLeft,
-                                          child: Text('Create a new Group',style: TextStyle(
-                                                          fontFamily: 'Roboto', 
-                                                            fontSize: 20,
-                                                            fontWeight: FontWeight.bold,
-                                                          color: Color.fromARGB(255, 0, 0, 0),
-                                                        ),),
-                                        ),
-                                      
-                                       Icon(Icons.arrow_forward,color: Colors.black,),
-                                    ],
-                                  ),
-                                              )
-                                            ),
-                                ),
+          
           
         ],
+      ),
+       bottomNavigationBar: MyConvexAppBar(
+        currentPage:0,
+        onTap: (int index) {
+          
+        },
       ),
     );
   }

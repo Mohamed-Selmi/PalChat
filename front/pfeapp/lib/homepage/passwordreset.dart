@@ -17,11 +17,9 @@ Future<void> ResetPassword(BuildContext context,String email) async{
     'email': email,
   };
 
-  // Encode the request body to JSON
   final String encodedData = jsonEncode(data);
 
   try {
-    // Make the POST request
     final http.Response response = await http.post(
       Uri.parse(apiUrl),
       headers: <String, String>{
@@ -30,23 +28,17 @@ Future<void> ResetPassword(BuildContext context,String email) async{
       body: encodedData,
     );
 
-    // Check the response status
     if (response.statusCode == 200) {
-      // Request was successful
       print('Password reset email sent successfully');
      Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => const ResetForm()),
       );
     } else {
-      // Request failed
       print('Failed to send reset email. Error: ${response.statusCode}');
-      // You can handle errors here, such as displaying an error message to the user
     }
   } catch (error) {
-    // Handle any exceptions that occur during the API call
     print('Error : $error');
-    // You can display an error message to the user or perform other error handling actions
   }
 }
 class PasswordReset extends StatefulWidget{
@@ -60,126 +52,167 @@ TextEditingController emailController = TextEditingController();
 @override
   Widget build(BuildContext context) {
     return Scaffold(
-          resizeToAvoidBottomInset: false,
-          backgroundColor: Color(0xffd1dff6),
+          resizeToAvoidBottomInset: true,
+          backgroundColor: const Color(0xfff2f2f2),
           
-          body:Container(
-            margin: const EdgeInsets.only(top: 40.0),
-            color:const Color.fromARGB(0, 255, 255, 255),
-            child: Column(children: [
-              const SizedBox(height:10,),
-              Container(
-                child:const Text('Welcome To PalChat',
+          body:SingleChildScrollView(
+            child: Container(
+              margin: const EdgeInsets.only(top: 40.0),
+              color:const Color.fromARGB(0, 255, 255, 255),
+              child: Column(children: [
+              SizedBox(height:MediaQuery.of(context).size.height * 0.02,),
+            
+                const Text('Welcome To PalChat',
                 textAlign: TextAlign.center,
                 style:TextStyle(
                   fontFamily: 'Aleo',
                       fontStyle: FontStyle.normal,
                       fontWeight: FontWeight.bold,
                       fontSize: 25.0,
-                      color: Colors.black
+                      color: Color(0xff011c27)
                 )
-                ), 
-              ),
-                Container(
-                  child:SizedBox(
-                      width: double.infinity,
-                  height: MediaQuery.of(context).size.height * 0.3,
-                  child:Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                    
+                ),
+               SizedBox(
+                    height:MediaQuery.of(context).size.height * 0.45,
                       child: SvgPicture.asset(
-                       'assets/images/logo2.svg',
-                        fit: BoxFit.cover,),
-                  ),
-                  ),
-                ),
-              const SizedBox(height:40),
-             Container(
-                child:Row(mainAxisAlignment: MainAxisAlignment.center, 
-                  children: [
-              const Icon(
-                    Icons.lock,
-                    color: Colors.blue,
-                    size: 100.0,
-                  ),
-                  Container(child:const Column(children:[
-                      Text('Forgot',
-                textAlign: TextAlign.left,
-                style:TextStyle(
-                  fontFamily: 'Aleo',
-                      fontStyle: FontStyle.normal,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 25.0,
-                      color: Colors.black
-                )),
-                Text('Password?',
-                textAlign: TextAlign.center,
-                style:TextStyle(
-                  fontFamily: 'Aleo',
-                      fontStyle: FontStyle.normal,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 25.0,
-                      color: Colors.blue
-                )),
-                  ]))
-                  ]
-                ),
-             ),
-             const SizedBox(height:20,),
-              SizedBox(height: 40, width:300,
-                      child:TextField(
+                        'assets/images/applogo.svg',                      
+                      ),
+                    ), 
+            
+               const Row(mainAxisAlignment: MainAxisAlignment.center, 
+                 children: [
+                             Icon(
+                   Icons.lock,
+                   color: Color(0xff007cbe),
+                   size: 100.0,
+                 ),
+                 Column(children:[
+                     Text('Forgot',
+                              textAlign: TextAlign.left,
+                              style:TextStyle(
+                 fontFamily: 'Aleo',
+                     fontStyle: FontStyle.normal,
+                     fontWeight: FontWeight.bold,
+                     fontSize: 25.0,
+                     color: Color(0xff011c27)
+                              )),
+                              Text('Password?',
+                              textAlign: TextAlign.center,
+                              style:TextStyle(
+                 fontFamily: 'Aleo',
+                     fontStyle: FontStyle.normal,
+                     fontWeight: FontWeight.bold,
+                     fontSize: 25.0,
+                     color: Color(0xff007cbe)
+                              )),
+                 ])
+                 ]
+               ),
+                  SizedBox(height:MediaQuery.of(context).size.height * 0.02,),
+                SizedBox(height: MediaQuery.of(context).size.height * 0.05,width:MediaQuery.of(context).size.width * 0.8,
+                        child:TextField(
+                        
+                        enableSuggestions: false,
+                        autocorrect: false,
+                        keyboardType: TextInputType.emailAddress,
+                        controller: emailController,
+                        style: const TextStyle(color: Color.fromARGB(255, 0, 0, 0),),
+                        decoration: const InputDecoration(
+                          contentPadding: EdgeInsets.symmetric(vertical: 1.0),
+                          hintText: 'Enter your Email Address',
+                          prefixIcon: Icon(Icons.email,
+                          color: Color(0xff011c27),),
+                          filled: true,
+                          fillColor: Color(0xfff5e1da),
+                          border:  OutlineInputBorder(
+                           
+                          ),
+                        ),
+                      ),
+                      ),
                       
-                      enableSuggestions: false,
-                      autocorrect: false,
-                      keyboardType: TextInputType.emailAddress,
-                      controller: emailController,
-                      style: const TextStyle(color: Color.fromARGB(255, 0, 0, 0),),
-                      decoration: const InputDecoration(
-                        contentPadding: EdgeInsets.symmetric(vertical: 1.0),
-                        hintText: 'Enter your Email Address',
-                        prefixIcon: Icon(Icons.email,
-                        color: Colors.black,),
-                        filled: true,
-                        fillColor: Color.fromARGB(255, 255, 255, 255),
-                        border:  OutlineInputBorder(
-                         
+                       SizedBox(height: MediaQuery.of(context).size.height * 0.04),
+                      SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.045,
+                      width:MediaQuery.of(context).size.width * 0.5,
+                       child:ElevatedButton(
+                        style:ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all<Color>(const Color(0xffe28413)),
+                          shape: MaterialStateProperty.all<OutlinedBorder>(const RoundedRectangleBorder(
+                              borderRadius: BorderRadius.zero,)
+                              ),
+                        ),
+                        onPressed: () {
+                    ResetPassword(
+                      context,
+                      emailController.text,
+                    );
+                  },
+                  child:const Text("Reset Password ",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                     fontFamily: 'Montserrat', 
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold,
+                    color: Color(0xff011c27),
+                  ),
+                  ),
+              ),
+                      ),
+                      SizedBox(height:MediaQuery.of(context).size.height * 0.05,),
+                FractionallySizedBox(
+                    widthFactor: 1.0, 
+                    child: Container(
+                      decoration: const ShapeDecoration(
+                        shape: RoundedRectangleBorder(
+                          side: BorderSide(
+                            width: 1,
+                            strokeAlign: BorderSide.strokeAlignCenter,
+                          ),
                         ),
                       ),
                     ),
-                    ),
-                    
-                    const SizedBox(height:20),
-                    SizedBox(
-                      height:30,
-                      width:200,
-                     child:ElevatedButton(
-                      style:ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all<Color>(const Color.fromARGB(255, 68, 68, 68)),
-                        shape: MaterialStateProperty.all<OutlinedBorder>(const RoundedRectangleBorder(
-                            borderRadius: BorderRadius.zero,)
-                            ),
+                  ),
+                  SizedBox(height:MediaQuery.of(context).size.height * 0.03,),
+                      SizedBox(
+                    width:MediaQuery.of(context).size.width * 0.8,
+                    child:Center(
+                      child: RichText(
+                        text:TextSpan(
+                          text: "Remember your password? ",
+                        style: const TextStyle(
+                                    color: Color(0xff011c27),
+                                                      fontFamily: 'Roboto', 
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.normal,),
+                        children: <TextSpan>[
+                          TextSpan(
+                                  text: 'Sign in!',
+                                    style: const TextStyle(
+                                     decoration: TextDecoration.underline,
+                                    color: Color(0xff0e79b2),
+                                                      fontFamily: 'Roboto', 
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.bold,
+                                          ),
+                                          recognizer: TapGestureRecognizer()
+                        ..onTap = () {
+                           Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(builder: (context) => const LoginView()),
+                        );
+                        }),
+                        ],
+                        ),
                       ),
-                      onPressed: () {
-                  ResetPassword(
-                    context,
-                    emailController.text,
-                  );
-                },
-                child:const Text("Reset Password ",
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                   fontFamily: 'Montserrat', 
-                    fontSize: 15,
-                    fontWeight: FontWeight.bold,
-                  color: Color.fromARGB(255, 255, 255, 255),
-                ),
-                ),
-  ),
                     ),
-            ],
-            ),
-
-            ),
+                  ),
+              ],
+              ),
+            
+              ),
+          ),
+            
     );
   }
 }
