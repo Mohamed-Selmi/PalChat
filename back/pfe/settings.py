@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-x0co5+wlc-)a@erkv3p9ksi4*c2z7o%qeipmq&ybpt=dl+)o@r
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', '192.168.1.3','192.168.1.4','*']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', '172.20.128.1','192.168.1.4','*']
 
 
 # Application definition
@@ -92,10 +92,10 @@ WSGI_APPLICATION = 'pfe.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'pfe',
-        'USER': 'root',
-        'PASSWORD': 'root',
-        'HOST':'localhost',
+        'NAME': os.environ.get('DB_NAME', 'pfe'),
+        'USER': os.environ.get('DB_USER', 'root'),
+        'PASSWORD': os.environ.get('DB_PASSWORD', ''),
+        'HOST':os.environ.get('DB_HOST', 'db'),
         'PORT':'3306',
         
     }
@@ -156,7 +156,7 @@ SIMPLE_JWT = {
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-BASE_URL = 'http://192.168.1.3:8000/'
+BASE_URL = 'http://172.20.128.1:8000/'
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587

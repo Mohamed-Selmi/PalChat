@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+  db:
+    image: mysql:8.0
+    container_name: palchat_mysql
+    restart: always
+    environment:
+      MYSQL_DATABASE: pfe               # This creates a database named 'pfe'
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 5s
+      retries: 5
+      interval: 5s
+
+  web:
+    build: .
+    container_name: palchat_backend
+    restart: always
+    command: >
+      sh -c "python manage.py makemigrations && 
+             python manage.py migrate && 
+             python manage.py runserver 0.0.0.0:8000"
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    environment:
+      - DB_HOST=db
+      - DB_NAME=pfe
+      - DB_USER=root
+      - DB_PASSWORD=
+    depends_on:
+      db:
+        condition: service_healthy 
+
+volumes:
+  mysql_data:

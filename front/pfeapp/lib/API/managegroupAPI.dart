@@ -4,7 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:pfeapp/models/conversation.dart';
 class ManageGroupAPI{
 
-final String baseUrl = "http://192.168.1.3:8000/chat";
+final String baseUrl = "http://172.20.128.1:8000/chat";
 
 
   static Future<Map<String, dynamic>> CreateGroup(String name) async {
@@ -15,7 +15,7 @@ final String baseUrl = "http://192.168.1.3:8000/chat";
     throw Exception('Access token not found');
   }
   final response = await http.post(
-    Uri.parse('http://192.168.1.3:8000/chat/create-group/'),
+    Uri.parse('http://172.20.128.1:8000/chat/create-group/'),
     headers: {
       'Authorization': 'Bearer $accessToken', // Include access token in headers
     },
@@ -38,7 +38,7 @@ static Future<Map<String, dynamic>> deleteGroup(int groupId) async {
   }
 
   final response = await http.delete(
-    Uri.parse('http://192.168.1.3:8000/chat/delete-group/$groupId/'),
+    Uri.parse('http://172.20.128.1:8000/chat/delete-group/$groupId/'),
     headers: {
       'Authorization': 'Bearer $accessToken',
     },
@@ -65,7 +65,7 @@ static Future<Map<String, dynamic>> deleteGroup(int groupId) async {
       return 'Access token not found';
     }
 
-    final String apiUrl = 'http://192.168.1.3:8000/chat/group-detail/$groupId/add-members/';
+    final String apiUrl = 'http://172.20.128.1:8000/chat/group-detail/$groupId/add-members/';
     Map<String, dynamic> requestBody = {
       'email': email,
     };
@@ -96,7 +96,7 @@ static Future<Map<String, dynamic>> deleteGroup(int groupId) async {
       throw Exception('Access token not found');
     }
 
-    const String apiUrl = 'http://192.168.1.3:8000/chat/group-detail/';
+    const String apiUrl = 'http://172.20.128.1:8000/chat/group-detail/';
     try {
       final response = await http.get(
         Uri.parse('$apiUrl$groupId'),
@@ -121,7 +121,7 @@ static Future<Map<String, dynamic>> deleteGroup(int groupId) async {
       throw Exception('Access token not found');
     }
 
-    const String apiUrl = 'http://192.168.1.3:8000/chat/user-chatrooms/';
+    const String apiUrl = 'http://172.20.128.1:8000/chat/user-chatrooms/';
     try {
       final response = await http.get(
         Uri.parse(apiUrl),
@@ -154,7 +154,7 @@ static Future<Map<String, dynamic>> deleteGroup(int groupId) async {
       throw Exception('Access token not found');
     }
 
-    final String apiUrl = 'http://192.168.1.3:8000/chat/group-detail/$groupId/remove-members/';
+    final String apiUrl = 'http://172.20.128.1:8000/chat/group-detail/$groupId/remove-members/';
     Map<String, dynamic> requestBody = {
       'member_id': userID,
     };
@@ -190,7 +190,7 @@ static Future<bool> leaveGroup(int groupId) async {
     throw Exception('Access token not found');
   }
 
-  final String apiUrl = 'http://192.168.1.3:8000/chat/leave-group/$groupId/';
+  final String apiUrl = 'http://172.20.128.1:8000/chat/leave-group/$groupId/';
   
   try {
     final response = await http.post(

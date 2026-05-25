@@ -7,7 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginAPI {
   static Future<void> loginUser(String email, String password, BuildContext context) async {
-    const String apiUrl = 'http://192.168.1.3:8000/accounts/login';
+    const String apiUrl = 'http://172.20.128.1:8000/accounts/login';
 
     final Map<String, dynamic> data = {
       'email': email,

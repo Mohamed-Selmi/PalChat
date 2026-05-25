@@ -10,7 +10,7 @@ import 'package:pfeapp/homepage/loginview.dart';
 import 'package:pfeapp/homepage/passwordreset.dart';
 import 'package:pfeapp/homepage/resetform.dart';
 Future<void> ResetPassword(BuildContext context,String email) async{
-  const String apiUrl = 'http://192.168.1.3:8000/accounts/password-reset';
+  const String apiUrl = 'http://172.20.128.1:8000/accounts/password-reset';
 
   // Prepare the request body
   final Map<String, dynamic> data = {

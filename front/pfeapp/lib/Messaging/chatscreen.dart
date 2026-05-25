@@ -44,7 +44,7 @@ class _chatscreenState extends State<chatscreen> {
 
     if (accessToken != null) {
       channel = IOWebSocketChannel.connect(
-        'ws://192.168.1.3:8000/ws/chat/${widget.groupId}/',
+        'ws://172.20.128.1:8000/ws/chat/${widget.groupId}/',
         headers: {
           'Authorization': 'Bearer $accessToken',
         },

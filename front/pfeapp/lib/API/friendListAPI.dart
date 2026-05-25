@@ -13,7 +13,7 @@ class FriendListAPI {
       throw Exception('Access token not found');
     }
 
-    const String apiUrl = 'http://192.168.1.3:8000/friends/show-friends';
+    const String apiUrl = 'http://172.20.128.1:8000/friends/show-friends';
     try {
       final response = await http.get(
         Uri.parse(apiUrl),
@@ -47,7 +47,7 @@ class FriendListAPI {
     throw Exception('Access token not found');
   }
 
-  final String apiUrl = 'http://192.168.1.3:8000/friends/visit-user-profile/$userId/';
+  final String apiUrl = 'http://172.20.128.1:8000/friends/visit-user-profile/$userId/';
   try {
     final response = await http.get(Uri.parse(apiUrl), headers: {
       'Authorization': 'Bearer $accessToken',

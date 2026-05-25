@@ -10,7 +10,7 @@ class LogoutAPI{
       throw Exception('Access token not found');
     }
 
-    const String apiUrl = 'http://192.168.1.3:8000/accounts/logout';
+    const String apiUrl = 'http://172.20.128.1:8000/accounts/logout';
     try {
       final response = await http.post(Uri.parse(apiUrl), headers: {
         'Authorization': 'Bearer $accessToken',

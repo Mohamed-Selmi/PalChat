@@ -5,7 +5,7 @@ import 'package:pfeapp/homepage/loginView.dart';
 class RegisterAPI{
   static Future<void> signUpUser(BuildContext context, username, String email, String password) async {
   
-  const String apiUrl = 'http://192.168.1.3:8000/accounts/register';
+  const String apiUrl = 'http://172.20.128.1:8000/accounts/register';
   
   final Map<String, dynamic> data = {
     'username': username,

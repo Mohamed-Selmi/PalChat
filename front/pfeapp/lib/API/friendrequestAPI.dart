@@ -11,7 +11,7 @@ class FriendRequestAPI{
     if (accessToken == null) {
       throw Exception('Access token not found');
     }
-     const String apiUrl = 'http://192.168.1.3:8000/friends/show-friend-requests/';
+     const String apiUrl = 'http://172.20.128.1:8000/friends/show-friend-requests/';
     try {
       final response = await http.get(
         Uri.parse(apiUrl),
@@ -48,7 +48,7 @@ static Future<List<FriendRequest>> fetchSentFriendRequests() async {
     if (accessToken == null) {
       throw Exception('Access token not found');
     }
-     const String apiUrl = 'http://192.168.1.3:8000/friends/sent-friend-requests/';
+     const String apiUrl = 'http://172.20.128.1:8000/friends/sent-friend-requests/';
     try {
       final response = await http.get(
         Uri.parse(apiUrl),
@@ -89,7 +89,7 @@ static Future<List<FriendRequest>> fetchSentFriendRequests() async {
     throw Exception('Access token not found');
   }
   
-  const String apiUrl = 'http://192.168.1.3:8000/friends/send-friend-request/'; 
+  const String apiUrl = 'http://172.20.128.1:8000/friends/send-friend-request/'; 
   try {
     final response = await http.post(
       Uri.parse(apiUrl),
@@ -118,7 +118,7 @@ static Future<List<FriendRequest>> fetchSentFriendRequests() async {
     if (accessToken == null) {
       throw Exception('Access token not found');
     }
-    final String apiUrl = 'http://192.168.1.3:8000/friends/accept-friend-request/$requestId/'; 
+    final String apiUrl = 'http://172.20.128.1:8000/friends/accept-friend-request/$requestId/'; 
     try {
       final response = await http.post(
         Uri.parse(apiUrl),
@@ -143,7 +143,7 @@ static Future<List<FriendRequest>> fetchSentFriendRequests() async {
     if (accessToken == null) {
       throw Exception('Access token not found');
     }
-    final String apiUrl = 'http://192.168.1.3:8000/friends/decline-friend-request/$requestId/'; 
+    final String apiUrl = 'http://172.20.128.1:8000/friends/decline-friend-request/$requestId/'; 
     try {
       final response = await http.post(
         Uri.parse(apiUrl),
@@ -167,7 +167,7 @@ static Future<List<FriendRequest>> fetchSentFriendRequests() async {
     if (accessToken == null) {
       throw Exception('Access token not found');
     }
-    final String apiUrl = 'http://192.168.1.3:8000/friends/cancel-friend-request/$requestId/'; 
+    final String apiUrl = 'http://172.20.128.1:8000/friends/cancel-friend-request/$requestId/'; 
     try {
       final response = await http.post(
         Uri.parse(apiUrl),
@@ -192,7 +192,7 @@ static Future<List<FriendRequest>> fetchSentFriendRequests() async {
     throw Exception('Access token not found');
   }
   
-  const String apiUrl = 'http://192.168.1.3:8000/friends/remove-friend/'; 
+  const String apiUrl = 'http://172.20.128.1:8000/friends/remove-friend/'; 
   try {
     final response = await http.post(
       Uri.parse(apiUrl),

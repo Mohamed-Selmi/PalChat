@@ -1,0 +1,25 @@
+- name: Launch PalChat Stack on Android Emulator
+  hosts: localhost
+  connection: local
+  tasks:
+
+    - name: 1. Starting docker
+      community.docker.docker_compose_v2:
+        project_src: "./Palchat/back"  # Path to your docker-compose.yml folder
+        state: present
+        v2: true
+
+    - name: 2. Starting emulator
+      ansible.builtin.command:
+        cmd: flutter emulators --launch Medium_Phone_API_36.1
+
+    - name: 3. Waiting for emulator to start
+      ansible.builtin.command:
+        cmd: adb wait-for-device shell 'while [[ "$(getprop sys.boot_completed)" != "1" ]]; do sleep 1; done'
+      changed_when: false
+      timeout: 60
+
+    - name: 4. Launching flutter app
+      ansible.builtin.command:
+        cmd: flutter run -d emulator-5554 --no-pub
+        chdir: "./Palchat/front/pfeapp"

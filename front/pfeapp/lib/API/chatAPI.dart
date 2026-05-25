@@ -13,7 +13,7 @@ class ChatAPI {
       throw Exception('Access token not found');
     }
 
-    final String url = 'http://192.168.1.3:8000/chat/room-messages/$conversationId';
+    final String url = 'http://172.20.128.1:8000/chat/room-messages/$conversationId';
 
     try {
       final response = await http.get(
@@ -47,7 +47,7 @@ class ChatAPI {
   if (accessToken == null) {
     throw Exception('Access token not found');
   }
-  const String apiUrl = 'http://192.168.1.3:8000/chat/create-message';
+  const String apiUrl = 'http://172.20.128.1:8000/chat/create-message';
   try {
     var request = http.MultipartRequest('POST', Uri.parse(apiUrl));
     request.headers['Authorization'] = 'Bearer $accessToken';

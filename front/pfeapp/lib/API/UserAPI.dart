@@ -10,7 +10,7 @@ class UserAPI{
       throw Exception('Access token not found');
     }
 
-    const String apiUrl = 'http://192.168.1.3:8000/accounts/user';
+    const String apiUrl = 'http://172.20.128.1:8000/accounts/user';
     try {
       final response = await http.get(Uri.parse(apiUrl), headers: {
         'Authorization': 'Bearer $accessToken',
@@ -38,7 +38,7 @@ class UserAPI{
     throw Exception('Access token not found');
   }
 
-  final String apiUrl = 'http://192.168.1.3:8000/accounts/search/?username=$username';
+  final String apiUrl = 'http://172.20.128.1:8000/accounts/search/?username=$username';
   try {
     final response = await http.get(
       Uri.parse(apiUrl),

@@ -8,7 +8,7 @@ from django.urls import reverse
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
 from rest_framework_simplejwt.tokens import RefreshToken
-from rest_auth.views import PasswordResetView
+from dj_rest_auth.views import PasswordResetView
 from django.conf import settings
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.views import APIView
